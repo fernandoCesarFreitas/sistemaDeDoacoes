@@ -7,6 +7,10 @@ export class BenificiariosController {
     return await Beneficiario.find();
   }
 
+  async find (idbenificiario: number) {
+    return await Beneficiario.findOneBy({ idbenificiario });
+  }
+
   async create (nome: string, endereco: string) {
     
     return await Beneficiario.create({
@@ -22,6 +26,8 @@ export class BenificiariosController {
 
     return beneficiario;
   }
+
+  
   
   async delete(beneficiario: Beneficiario): Promise<void> {
     await beneficiario.remove();
