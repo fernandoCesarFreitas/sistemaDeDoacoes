@@ -1,0 +1,26 @@
+{
+  "name": "aula_2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "app": "rm -rf ./dist && tsc && node ./dist/app.js",
+    "typeorm": "typeorm-ts-node-commonjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^20.5.0",
+    "@types/prompt-sync": "^4.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.3",
+    "prompt-sync": "^4.2.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.17"
+  }
+}
