@@ -13,4 +13,8 @@ export class Voluntario extends BaseEntity {
 
   @Column({ length: 255 })
   email: string;
+  @Column({
+    type: "char",
+  })
+  public situacao: string;
 }
