@@ -9,7 +9,16 @@ export class CD extends BaseEntity {
   @Column({ length: 255 })
   nome: string;
 
-  @ManyToOne(() => Cidade, { eager: true }) // Define a relação com a entidade Cidade
+  @Column({
+    type: "char",
+  })
+  public situacao: string;
+
+  @Column()
+  public cidade_id_cidade: number;
+
+
+  @ManyToOne(() => Cidade, (cidade) => cidade.cds) // Define a relação com a entidade Cidade
   @JoinColumn({ name: 'cidade_id_cidade' })
-  cidade: Cidade;
+  public cidade: Cidade;
 }

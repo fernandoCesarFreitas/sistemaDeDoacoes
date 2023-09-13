@@ -4,6 +4,7 @@ import { Voluntario } from "../models/Voluntarios";
 import { BeneficiariosMenu } from "./BeneficiariosMenu";
 import { VoluntarioController } from "../controllers/VoluntariosController";
 import { MenuVoluntarios } from "./VoluntariosMenu";
+import { MenuCD } from './MenuCd';
 import PromptSync from "prompt-sync";
 const prompt = PromptSync();
 
@@ -12,29 +13,31 @@ export class Menu {
   public voluntarioController: VoluntarioController;
   public menuVoluntario: MenuVoluntarios;
   public menuCidade: MenuCidade;
+  public menuCd: MenuCD;
 
   constructor() {
     this.menuBenificiario = new BeneficiariosMenu();
     this.voluntarioController = new VoluntarioController();
     this.menuVoluntario = new MenuVoluntarios();
     this.menuCidade =  new MenuCidade();
+    this.menuCd =  new MenuCD();
   }
   async menu() {
     let cont: number = 0;
-    while (cont < 3) {//
-      let nome: string = prompt("Nome: ");//
-      let senha: string = prompt("Senha: ");//
+    while (cont < 3) {//*
+      let nome: string = prompt("Nome: ");//*
+      let senha: string = prompt("Senha: ");//*
 
-      let ok;//
+      let ok;//*
 
-      let okU: Voluntario | null = await this.voluntarioController.checker(nome);//
+      let okU: Voluntario | null = await this.voluntarioController.checker(nome);//*
 
-      if (okU) {//
-        ok = this.voluntarioController.checkPassword(senha, okU.senha);//
-      }//
+      if (okU) {//*
+        ok = this.voluntarioController.checkPassword(senha, okU.senha);//*
+      }//*
 
-      if (ok && okU != null) {//
-        this.voluntarioController.setusuarioLogado(okU);//
+      if (ok && okU != null) {//*
+        this.voluntarioController.setusuarioLogado(okU);//*
     cont = 3;
     let input: number = 0;
     do {
@@ -45,9 +48,10 @@ export class Menu {
           "[1]- Voluntários\n" +
           "[2]- benificiário \n" +
           "[3]- Cidades \n" +
-          "[4]- Categorias \n" +
-          "[5]- Itens \n" +
-          "[5]- Movimentações \n" +
+          "[4]- CD's \n" +
+          "[5]- Categorias \n" +
+          "[6]- Itens \n" +
+          "[7]- Movimentações \n" +
           "[0]- Sair"
       );
       input = Number(prompt("Selecione a opção desejada: "));
@@ -63,8 +67,9 @@ export class Menu {
           await this.menuCidade.menuCidade();
           break;
         case 4:
+          await this.menuCd.menuCD();
           break;
-        case 4:
+        case 5:
           break;
         default:
           console.clear();
@@ -76,13 +81,13 @@ export class Menu {
         prompt("presione qualquer tecla para continuar");
       }
     } while (input != 0);
-    } else {//
-      console.log("Usuário ou senha inválidos");//
-    }//
-    if (cont > 3) {//
-      console.log(`Voce possui mais ${2 - cont}, tentativas!`);//
-    }//
-    cont++;//
-    }//
+    } else {//*
+      console.log("Usuário ou senha inválidos");//*
+    }//*
+    if (cont > 3) {//*
+      console.log(`Voce possui mais ${2 - cont}, tentativas!`);//*
+    }//*
+    cont++;//*
+    }//*
   }
 }

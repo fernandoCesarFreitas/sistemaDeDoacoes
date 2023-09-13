@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
-
+import { OneToMany,Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { CD } from './Cds';
 @Entity()
 export class Cidade extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -12,4 +12,7 @@ export class Cidade extends BaseEntity {
     type: "char",
   })
   public situacao: string;
+
+  @OneToMany(() => CD, (cd) => cd.cidade)
+  public cds: Promise<CD[]>;
 }
