@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from 'typeorm';
 import { Cidade } from './Cidades';
 
-@Entity()
+@Entity('cds')
 export class CD extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_CD: number;
@@ -14,7 +14,7 @@ export class CD extends BaseEntity {
   })
   public situacao: string;
 
-  @Column()
+  @Column({})
   public cidade_id_cidade: number;
 
 

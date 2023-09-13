@@ -1,7 +1,7 @@
 import { Categoria } from './Categorias';
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from 'typeorm';
 
-@Entity()
+@Entity('itens')
 export class Item extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_item: number;

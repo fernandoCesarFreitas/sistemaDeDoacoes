@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from 'typeorm';
 import { Cidade } from './Cidades';// Importe a entidade Cidade aqui
 
-@Entity()
+@Entity('beneficiarios')
 export class Beneficiario extends BaseEntity {
   @PrimaryGeneratedColumn()
   idbenificiario: number;

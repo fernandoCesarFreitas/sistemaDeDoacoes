@@ -2,7 +2,7 @@ import { Item } from './Item';
 import { CD } from './Cds';
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from 'typeorm';
 
-@Entity()
+@Entity('cd_item')
 export class CdItem extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_cd_item: number;

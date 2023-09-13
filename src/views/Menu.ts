@@ -42,7 +42,7 @@ export class Menu {
     let input: number = 0;
     do {
       console.clear();
-      console.log(`Bem-vindo ${okU.nome}`);
+      console.log(`Bem-vindo ${okU.nome}`);//*
       console.log(
         "*======* CONTROLE DE DOAÇÕES *======*\n" +
           "[1]- Voluntários\n" +
@@ -73,7 +73,7 @@ export class Menu {
           break;
         default:
           console.clear();
-          console.log(`Até logo ${okU.nome}!`);
+          console.log(`Até logo ${okU.nome}!`);//*
           break;
       }
 

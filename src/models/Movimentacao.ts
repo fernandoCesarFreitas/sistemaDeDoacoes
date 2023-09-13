@@ -2,7 +2,7 @@ import { Beneficiario } from './Benificiarios';
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from 'typeorm';
 import { CdItem } from './cd_item'; // Importe a entidade CdItem aqui
 
-@Entity()
+@Entity('movimentacoes')
 export class Movimentacao extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_movimentacao: number;
