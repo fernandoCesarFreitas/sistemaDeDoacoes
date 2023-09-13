@@ -7,4 +7,9 @@ export class Cidade extends BaseEntity {
 
   @Column({ length: 255 })
   nome: string;
+
+  @Column({
+    type: "char",
+  })
+  public situacao: string;
 }

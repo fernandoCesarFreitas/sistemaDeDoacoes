@@ -1,3 +1,4 @@
+import { MenuCidade } from './MenuCidades';
 // import { MenuRelatorios } from "./MenuRelatorio";
 import { Voluntario } from "../models/Voluntarios";
 import { BeneficiariosMenu } from "./BeneficiariosMenu";
@@ -10,11 +11,13 @@ export class Menu {
   public menuBenificiario: BeneficiariosMenu;
   public voluntarioController: VoluntarioController;
   public menuVoluntario: MenuVoluntarios;
+  public menuCidade: MenuCidade;
 
   constructor() {
     this.menuBenificiario = new BeneficiariosMenu();
     this.voluntarioController = new VoluntarioController();
     this.menuVoluntario = new MenuVoluntarios();
+    this.menuCidade =  new MenuCidade();
   }
   async menu() {
     let cont: number = 0;
@@ -38,7 +41,7 @@ export class Menu {
       console.clear();
       console.log(`Bem-vindo ${okU.nome}`);
       console.log(
-        "*======* CONTROLE DE DESPESAS *======*\n" +
+        "*======* CONTROLE DE DOAÇÕES *======*\n" +
           "[1]- Voluntários\n" +
           "[2]- benificiário \n" +
           "[3]- Cidades \n" +
@@ -57,6 +60,7 @@ export class Menu {
           await this.menuBenificiario.show();
           break;
         case 3:
+          await this.menuCidade.menuCidade();
           break;
         case 4:
           break;
@@ -64,7 +68,7 @@ export class Menu {
           break;
         default:
           console.clear();
-          // console.log(`Até logo ${okU.nome}!`);
+          console.log(`Até logo ${okU.nome}!`);
           break;
       }
 
