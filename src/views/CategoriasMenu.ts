@@ -14,27 +14,41 @@ export class CategoriasMenu {
   }
   
   public show() {
+    console.clear();
     console.log("1 - Listar categorias");
     console.log("2 - Cadastrar nova categoria");
     console.log("3 - Atualizar categoria");
     console.log("4 - Excluir categoria");
+    console.log("0 - Voltar ao menu principal");
   }
+  
+  public async execute() {
 
-  public async execute(input: string | null) {
+    let input: string;
+    do {
+      this.show();
+      input = prompt("Selecione a opção desejada: ");
     switch (input) {
-      case "5":
+      case "1":
         await this.list();
         break;
-      case "6":
+      case "2":
         await this.create();
         break;
-      case "7":
+      case "3":
         await this.edit();
         break;
-      case "8":
+      case "4":
         await this.delete();
         break;
+       
+        default:
+          break;
     }
+    if (parseInt(input) != 0) {
+      prompt("presione qualquer tecla para continuar");
+    }
+  } while (parseInt(input) != 0);
   }
 
   private async list(): Promise<void> {
