@@ -1,4 +1,5 @@
 import { CdController } from './../controllers/CdController';
+import { CidadesController } from '../controllers/CidadesController';
 import PromptSync from "prompt-sync";
 const prompt = PromptSync();
 import { CD } from "../models/Cds";
@@ -6,8 +7,10 @@ import { Cidade } from "../models/Cidades";
 
 export class MenuCD {
   public controller: CdController;
+  public cController: CidadesController;
   constructor() {
     this.controller = new CdController();
+    this.cController = new CidadesController();
   }
   async menuCD(): Promise<void> {
     let opcao: number = 0;
@@ -53,6 +56,9 @@ export class MenuCD {
     let nome: string = prompt("Nome: ");
     let situacao: string = "A";
 
+    let listaCidades = await this.cController.list();
+    console.table(listaCidades);
+
     let cidadeId: number = Number(prompt("Id Cidade: "));
     let catId: Cidade | null = await Cidade.findOneBy({
       id_cidade: cidadeId,
@@ -88,7 +94,7 @@ export class MenuCD {
       ).toUpperCase();
       if (situacao == "A" || situacao == "I") {
         cd = await this.controller.edit(cd, nome, situacao);
-        console.log(`Categoria #${cd.id_CD} criada com sucesso!`);
+        console.log(`CD #${cd.id_CD} atualizado com sucesso!`);
       } else {
         console.log("Dados Incorretos [A] - Ativo / [I] - Inativo");
       }
