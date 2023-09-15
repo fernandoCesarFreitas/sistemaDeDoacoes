@@ -1,14 +1,18 @@
 import { BenificiariosController } from "../controllers/BenificiariosController";
 import PromptSync from "prompt-sync";
 import { Beneficiario } from "../models/Benificiarios";
+import { CidadesController } from '../controllers/CidadesController';
+import { Cidade } from "../models/Cidades";
 
 const prompt = PromptSync();
 
 export class BeneficiariosMenu {
   public controller: BenificiariosController;
+  public cController: CidadesController;
 
   constructor() {
     this.controller = new BenificiariosController();
+    this.cController = new CidadesController();
   }
 
   public show() {
@@ -54,12 +58,52 @@ export class BeneficiariosMenu {
     let nome: string = prompt("Nome: ");
     let endereco: string = prompt("Endereço: ");
 
-    let beneficiario = await this.controller.create(nome, endereco);
+    let listaCidades = await this.cController.list();
+    console.table(listaCidades);
 
-    console.log(
-      `Beneficiário ID #${beneficiario.idbenificiario} criando com sucesso!`
-    );
+   
+  
+    
+    let cidadeId: number;
+
+    let cidadeEncontrada = false;
+  
+    do {
+      cidadeId = Number(prompt("ID da Cidade: "));
+      let cidade: Cidade | null = await Cidade.findOneBy({
+        id_cidade: cidadeId,
+      });
+  
+      if (cidade) {
+        cidadeEncontrada = true;
+        try {
+          let beneficiario: Beneficiario = await this.controller.create(
+            nome,
+            endereco,
+            cidade.id_cidade,
+          );
+          console.log(`Beneficiario ID #${beneficiario.idbenificiario} criado com sucesso!`);
+        } catch (error: any) {
+          console.log(error.message);
+        }
+      } else {
+        console.log("Cidade não encontrada. Tente novamente ou digite 0 para sair.");
+        cidadeId = Number(prompt("ID da Cidade (digite 0 para sair): "));
+        if (cidadeId === 0) {
+          break; // Sai do loop se o usuário digitar 0
+        }
+      }
+    } while (!cidadeEncontrada);
+  
+    console.log("Pressione qualquer tecla para continuar");
   }
+  
+  
+  
+  
+
+
+
 
   private async edit(): Promise<void> {
     let id: number = Number(prompt("Qual o ID?"));

@@ -64,7 +64,7 @@ export class MenuCD {
       id_cidade: cidadeId,
     });
     if (!catId) {
-      throw new Error("Categoria não encontrada!");
+      throw new Error("Cidade não encontrada!");
     }
 
   //   let cd: CD = await this.controller.create(nome, situacao,catId);
@@ -76,7 +76,7 @@ export class MenuCD {
       situacao,
       catId.id_cidade,
     );
-    console.log(`Tarefa ID #${cd.id_CD} criada com sucesso!`);
+    console.log(`CD ID #${cd.id_CD} criado com sucesso!`);
   } catch (error: any) {
     console.log(error.message);
   }

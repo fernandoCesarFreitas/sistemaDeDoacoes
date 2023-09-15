@@ -1,5 +1,6 @@
 import { Beneficiario } from "../models/Benificiarios";
-import { Between, Not } from 'typeorm';
+let beneficiario: Beneficiario = new Beneficiario();
+
 
 export class BenificiariosController {
 
@@ -11,12 +12,17 @@ export class BenificiariosController {
     return await Beneficiario.findOneBy({ idbenificiario });
   }
 
-  async create (nome: string, endereco: string) {
-    
-    return await Beneficiario.create({
-      nome,
-      endereco,
-    }).save();
+  async create(
+    nome: string,
+    endereco: string,
+    cidadeId: number,
+  ):Promise <Beneficiario> {
+    beneficiario.nome = nome;
+    beneficiario.endereco =  endereco;
+    beneficiario.cidade_id_cidade = cidadeId;
+
+    await beneficiario.save();
+    return beneficiario;
   }
 
   async edit(beneficiario: Beneficiario, nome: string, endereco: string) {
