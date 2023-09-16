@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity ,OneToMany, } from 'typeorm';
+import { Item } from './Item';
 @Entity('categorias')
 export class Categoria extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -7,4 +7,7 @@ export class Categoria extends BaseEntity {
 
   @Column({ length: 255 })
   descricao: string;
+
+  @OneToMany(() => Item, (item) => item.categoria) //relacao com a tabela CD 1/n
+  public categoria: Promise<Item[]>;
 }

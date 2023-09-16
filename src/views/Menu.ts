@@ -6,6 +6,7 @@ import { VoluntarioController } from "../controllers/VoluntariosController";
 import { MenuVoluntarios } from "./VoluntariosMenu";
 import { MenuCD } from "./MenuCd";
 import { CategoriasMenu } from "./CategoriasMenu";
+import { MenuItem } from "./MenuItens";
 import PromptSync from "prompt-sync";
 const prompt = PromptSync();
 
@@ -16,6 +17,7 @@ export class Menu {
   public menuCidade: MenuCidade;
   public menuCd: MenuCD;
   public menuCategorias: CategoriasMenu;
+  public menuItem: MenuItem;
 
   constructor() {
     this.menuPessoas = new PessoasMenu();
@@ -24,6 +26,7 @@ export class Menu {
     this.menuCidade = new MenuCidade();
     this.menuCd = new MenuCD();
     this.menuCategorias = new CategoriasMenu();
+    this.menuItem = new MenuItem();
   }
   async menu() {
     let cont: number = 0;
@@ -81,6 +84,9 @@ export class Menu {
             case 5:
               await this.menuCategorias.show();
               await this.menuCategorias.execute();
+              break;
+              case 6:
+              await this.menuItem.menuItens();
               break;
             default:
               console.clear();

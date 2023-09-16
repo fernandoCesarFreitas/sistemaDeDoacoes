@@ -6,10 +6,21 @@ export class Item extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_item: number;
 
-  @Column({ length: 255, nullable: true })
+  @Column({ length: 255 })
   nome: string;
 
-  @ManyToOne(() => Categoria, { eager: true }) // Define a relação com a entidade Categoria
+  @Column({
+    type: "char",
+  })
+  public situacao: string;
+
+  @Column({})
+  public categoria_id_categoria: number;
+
+
+  @ManyToOne(() => Categoria, (categoria) => categoria.categoria) // Define a relação com a entidade Cidade
   @JoinColumn({ name: 'categoria_id_categoria' })
-  categoria: Categoria;
+  public categoria: Categoria;
 }
+
+//nullable: true 
