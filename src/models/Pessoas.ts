@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn } from 'typeorm';
 import { Cidade } from './Cidades';
 
-@Entity('beneficiarios')
-export class Beneficiario extends BaseEntity {
+@Entity('pessoas')
+export class Pessoas extends BaseEntity {
   @PrimaryGeneratedColumn()
-  idbenificiario: number;
+  idPessoa: number;
 
   @Column({ length: 255 })
   nome: string;
@@ -15,7 +15,7 @@ export class Beneficiario extends BaseEntity {
   @Column({})
   public cidade_id_cidade: number;
 
-  @ManyToOne(() => Cidade, (cidade) => cidade.beneficiarios) // Define a relação com a entidade beneficiarios
+  @ManyToOne(() => Cidade, (cidade) => cidade.pessoas) // Define a relação com a entidade beneficiarios
   @JoinColumn({ name: 'cidade_id_cidade' })
   public cidade: Cidade;
 }

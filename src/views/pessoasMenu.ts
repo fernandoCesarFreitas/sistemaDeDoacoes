@@ -1,17 +1,17 @@
-import { BenificiariosController } from "../controllers/BenificiariosController";
+import { PessoasController } from "../controllers/PessoasController";
 import PromptSync from "prompt-sync";
-import { Beneficiario } from "../models/Benificiarios";
-import { CidadesController } from '../controllers/CidadesController';
+import { Pessoas } from "../models/Pessoas";
+import { CidadesController } from "../controllers/CidadesController";
 import { Cidade } from "../models/Cidades";
 
 const prompt = PromptSync();
 
-export class BeneficiariosMenu {
-  public controller: BenificiariosController;
+export class PessoasMenu {
+  public controller: PessoasController;
   public cController: CidadesController;
 
   constructor() {
-    this.controller = new BenificiariosController();
+    this.controller = new PessoasController();
     this.cController = new CidadesController();
   }
 
@@ -50,8 +50,8 @@ export class BeneficiariosMenu {
   }
 
   private async list(): Promise<void> {
-    let beneficiarios = await this.controller.list();
-    console.table(beneficiarios);
+    let pessoas = await this.controller.list();
+    console.table(pessoas);
   }
 
   private async create(): Promise<void> {
@@ -61,80 +61,74 @@ export class BeneficiariosMenu {
     let listaCidades = await this.cController.list();
     console.table(listaCidades);
 
-   
-  
-    
     let cidadeId: number;
 
     let cidadeEncontrada = false;
-  
+
     do {
       cidadeId = Number(prompt("ID da Cidade: "));
       let cidade: Cidade | null = await Cidade.findOneBy({
         id_cidade: cidadeId,
       });
-  
+
       if (cidade) {
         cidadeEncontrada = true;
         try {
-          let beneficiario: Beneficiario = await this.controller.create(
+          let pessoa: Pessoas = await this.controller.create(
             nome,
             endereco,
-            cidade.id_cidade,
+            cidade.id_cidade
           );
-          console.log(`Beneficiario ID #${beneficiario.idbenificiario} criado com sucesso!`);
+          console.log(
+            `Pessoa ID #${pessoa.idPessoa} criada com sucesso!`
+          );
         } catch (error: any) {
           console.log(error.message);
         }
       } else {
-        console.log("Cidade não encontrada. Tente novamente ou digite 0 para sair.");
+        console.log(
+          "Cidade não encontrada. Tente novamente ou digite 0 para sair."
+        );
         cidadeId = Number(prompt("ID da Cidade (digite 0 para sair): "));
         if (cidadeId === 0) {
           break; // Sai do loop se o usuário digitar 0
         }
       }
     } while (!cidadeEncontrada);
-  
+
     console.log("Pressione qualquer tecla para continuar");
   }
-  
-  
-  
-  
-
-
-
 
   private async edit(): Promise<void> {
     let id: number = Number(prompt("Qual o ID?"));
-    let beneficiario: Beneficiario | null = await this.controller.find(id);
+    let pessoa: Pessoas | null = await this.controller.find(id);
 
-    if (beneficiario) {
-      let name = prompt(`Nome ${beneficiario.nome}`, beneficiario.nome);
+    if (pessoa) {
+      let name = prompt(`Nome ${pessoa.nome}`, pessoa.nome);
       let endereco = prompt(
-        `Endereço ${beneficiario.endereco}`,
-        beneficiario.endereco
+        `Endereço ${pessoa.endereco}`,
+        pessoa.endereco
       );
 
-      beneficiario = await this.controller.edit(beneficiario, name, endereco);
+      pessoa = await this.controller.edit(pessoa, name, endereco);
       console.log(
-        `Cliente ID #${beneficiario.idbenificiario} atualizado com sucesso!`
+        `Pessoa ID #${pessoa.idPessoa} atualizada com sucesso!`
       );
     } else {
-      console.log("Cliente não encontrado");
+      console.log("Pessoa não encontrado");
     }
-    console.log("Cliente atualizado com sucesso!");
+    console.log("Pessoa atualizado com sucesso!");
   }
 
   private async delete(): Promise<void> {
     let id: number = Number(prompt("Qual o ID?"));
 
-    let beneficiario: Beneficiario | null = await this.controller.find(id);
-    if (beneficiario) {
-      await this.controller.delete(beneficiario);
-      console.log(`Cliente ID#${id} excluído com sucesso!`);
+    let pessoa: Pessoas | null = await this.controller.find(id);
+    if (pessoa) {
+      await this.controller.delete(pessoa);
+      console.log(`Pessoa ID#${id} deletada com sucesso!`);
     } else {
-      console.log("Cliente não encontrado");
+      console.log("Pessoa não encontrada");
     }
   }
 }
