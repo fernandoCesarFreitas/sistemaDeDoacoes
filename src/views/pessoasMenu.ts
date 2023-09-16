@@ -42,6 +42,9 @@ export class PessoasMenu {
         case "4":
           await this.delete();
           break;
+        default:
+          console.clear();
+          break;
       }
       if (parseInt(input) != 0) {
         prompt("presione qualquer tecla para continuar");
@@ -79,9 +82,7 @@ export class PessoasMenu {
             endereco,
             cidade.id_cidade
           );
-          console.log(
-            `Pessoa ID #${pessoa.idPessoa} criada com sucesso!`
-          );
+          console.log(`Pessoa ID #${pessoa.idPessoa} criada com sucesso!`);
         } catch (error: any) {
           console.log(error.message);
         }
@@ -105,15 +106,10 @@ export class PessoasMenu {
 
     if (pessoa) {
       let name = prompt(`Nome ${pessoa.nome}`, pessoa.nome);
-      let endereco = prompt(
-        `Endereço ${pessoa.endereco}`,
-        pessoa.endereco
-      );
+      let endereco = prompt(`Endereço ${pessoa.endereco}`, pessoa.endereco);
 
       pessoa = await this.controller.edit(pessoa, name, endereco);
-      console.log(
-        `Pessoa ID #${pessoa.idPessoa} atualizada com sucesso!`
-      );
+      console.log(`Pessoa ID #${pessoa.idPessoa} atualizada com sucesso!`);
     } else {
       console.log("Pessoa não encontrado");
     }

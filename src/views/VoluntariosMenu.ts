@@ -35,6 +35,7 @@ export class MenuVoluntarios {
           await this.delete();
           break;
         default:
+          console.clear();
           break;
       }
       if (opcao != 0) {
@@ -48,13 +49,13 @@ export class MenuVoluntarios {
   }
 
   private async create(): Promise<void> {
-    let situacao: string = 'A'
+    let situacao: string = "A";
     let nome: string = prompt("Nome: ");
     let email: string = prompt("E-mail: ");
     let senha: string = prompt("Senha: ");
 
     let s;
-     s = await this.controller.setPassword(senha);
+    s = await this.controller.setPassword(senha);
 
     let voluntario: Voluntario = await this.controller.create(
       nome,
@@ -80,7 +81,7 @@ export class MenuVoluntarios {
         `Situção(${voluntario.situacao}): `,
         voluntario.situacao
       ).toLocaleUpperCase();
-      
+
       voluntario = await this.controller.edit(
         voluntario,
         nome,
@@ -88,7 +89,9 @@ export class MenuVoluntarios {
         s,
         situacao
       );
-      console.log(`Cliente ID #${voluntario.idvoluntario} atualizado com sucesso!`);
+      console.log(
+        `Cliente ID #${voluntario.idvoluntario} atualizado com sucesso!`
+      );
     } else {
       console.log("Cliente não encontrado!");
     }
@@ -104,7 +107,9 @@ export class MenuVoluntarios {
       ).toLocaleUpperCase();
       if (resultado == "S") {
         this.controller.delete(voluntario);
-        console.log(`Usuário #${voluntario.idvoluntario} deletado com Sucesso!`);
+        console.log(
+          `Usuário #${voluntario.idvoluntario} deletado com Sucesso!`
+        );
       }
     } else {
       console.log("Usuário não encontrado!");

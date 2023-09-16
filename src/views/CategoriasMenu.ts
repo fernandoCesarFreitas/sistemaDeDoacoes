@@ -4,15 +4,13 @@ import { Categoria } from "../models/Categorias";
 
 const prompt = PromptSync();
 
-
-
 export class CategoriasMenu {
   public controller: CategoriasController;
 
   constructor() {
     this.controller = new CategoriasController();
   }
-  
+
   public show() {
     console.clear();
     console.log("1 - Listar categorias");
@@ -21,34 +19,33 @@ export class CategoriasMenu {
     console.log("4 - Excluir categoria");
     console.log("0 - Voltar ao menu principal");
   }
-  
-  public async execute() {
 
+  public async execute() {
     let input: string;
     do {
       this.show();
       input = prompt("Selecione a opção desejada: ");
-    switch (input) {
-      case "1":
-        await this.list();
-        break;
-      case "2":
-        await this.create();
-        break;
-      case "3":
-        await this.edit();
-        break;
-      case "4":
-        await this.delete();
-        break;
-       
-        default:
+      switch (input) {
+        case "1":
+          await this.list();
           break;
-    }
-    if (parseInt(input) != 0) {
-      prompt("presione qualquer tecla para continuar");
-    }
-  } while (parseInt(input) != 0);
+        case "2":
+          await this.create();
+          break;
+        case "3":
+          await this.edit();
+          break;
+        case "4":
+          await this.delete();
+          break;
+        default:
+          console.clear();
+          break;
+      }
+      if (parseInt(input) != 0) {
+        prompt("presione qualquer tecla para continuar");
+      }
+    } while (parseInt(input) != 0);
   }
 
   private async list(): Promise<void> {
@@ -70,12 +67,17 @@ export class CategoriasMenu {
 
     if (categoria) {
       let idcate = prompt(`ID ${categoria.id_categoria}`);
-      let descricao = prompt(`Descrição ${categoria.descricao}`, categoria.descricao);
+      let descricao = prompt(
+        `Descrição ${categoria.descricao}`,
+        categoria.descricao
+      );
 
       categoria = await this.controller.edit(categoria, descricao);
-      console.log(`Cliente ID #${categoria.id_categoria} atualizado com sucesso!`)
+      console.log(
+        `Cliente ID #${categoria.id_categoria} atualizado com sucesso!`
+      );
     } else {
-      console.log('Cliente não encontrado')
+      console.log("Cliente não encontrado");
     }
     console.log("Cliente atualizado com sucesso!");
   }
@@ -88,7 +90,7 @@ export class CategoriasMenu {
       await this.controller.delete(categoria);
       console.log(`Cliente ID#${id} excluído com sucesso!`);
     } else {
-      console.log('Cliente não encontrado');
+      console.log("Cliente não encontrado");
     }
   }
 }

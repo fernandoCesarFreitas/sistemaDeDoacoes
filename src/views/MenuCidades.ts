@@ -34,6 +34,7 @@ export class MenuCidade {
           await this.delete();
           break;
         default:
+          console.clear();
           break;
       }
       if (opcao != 0) {

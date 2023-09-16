@@ -1,5 +1,5 @@
-import { CdController } from './../controllers/CdController';
-import { CidadesController } from '../controllers/CidadesController';
+import { CdController } from "./../controllers/CdController";
+import { CidadesController } from "../controllers/CidadesController";
 import PromptSync from "prompt-sync";
 const prompt = PromptSync();
 import { CD } from "../models/Cds";
@@ -38,6 +38,7 @@ export class MenuCD {
           await this.delete();
           break;
         default:
+          console.clear();
           break;
       }
       if (opcao != 0) {
@@ -67,20 +68,20 @@ export class MenuCD {
       throw new Error("Cidade não encontrada!");
     }
 
-  //   let cd: CD = await this.controller.create(nome, situacao,catId);
-  //   console.log(`CD #${cd.id_CD} criado com sucesso!`);
-  // }
-  try {
-    let cd: CD = await this.controller.create(
-      nome,
-      situacao,
-      catId.id_cidade,
-    );
-    console.log(`CD ID #${cd.id_CD} criado com sucesso!`);
-  } catch (error: any) {
-    console.log(error.message);
+    //   let cd: CD = await this.controller.create(nome, situacao,catId);
+    //   console.log(`CD #${cd.id_CD} criado com sucesso!`);
+    // }
+    try {
+      let cd: CD = await this.controller.create(
+        nome,
+        situacao,
+        catId.id_cidade
+      );
+      console.log(`CD ID #${cd.id_CD} criado com sucesso!`);
+    } catch (error: any) {
+      console.log(error.message);
+    }
   }
-}
 
   private async edit(): Promise<void> {
     await this.list();
