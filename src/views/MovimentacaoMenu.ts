@@ -1,10 +1,12 @@
-import { CD } from './../models/Cds';
-import { CdController } from './../controllers/CdController';
+import { ItemController } from "./../controllers/ItemController";
+import { CD } from "./../models/Cds";
+import { CdController } from "./../controllers/CdController";
 import { MovimentacaoContrller } from "../controllers/MovimentacaoController";
 import PromptSync from "prompt-sync";
 import { Movimentacao } from "../models/Movimentacao";
 import { PessoasController } from "../controllers/PessoasController";
 import { Pessoas } from "../models/Pessoas";
+import { Item } from "../models/Item";
 
 const prompt = PromptSync();
 
@@ -12,11 +14,13 @@ export class MovimentacoesMenu {
   public controller: MovimentacaoContrller;
   public pController: PessoasController;
   public cdController: CdController;
+  public itemController: ItemController;
 
   constructor() {
     this.controller = new MovimentacaoContrller();
     this.pController = new PessoasController();
-    this.cdController =  new CdController();
+    this.cdController = new CdController();
+    this.itemController = new ItemController();
   }
 
   public show() {
@@ -62,31 +66,41 @@ export class MovimentacoesMenu {
   }
 
   private async create(): Promise<void> {
-    let anonimo: string = 'Anonimo';
-    let beneficiario:number;
-    let doador: string='';
-    
-    let tipo: string = prompt("Tipo de movimentação: \n[D]-efetuar doaçao\n[R]receber doacao:\n").toUpperCase();
+    let anonimo: string = "Anonimo";
+    let beneficiario: number;
+    let doador: string = "";
 
-    if(tipo == 'R'){
-      this.pController.list();//chama a lista de pessoas cadastradas para o usuario escolher 1
-      beneficiario=Number(prompt('qual o id da pessoa que irá receber a doação:'));
-      let pessoa: Pessoas | null =await  this.pController.find(beneficiario);
+    let tipo: string = prompt(
+      "Tipo de movimentação: \n[D]-efetuar doaçao\n[R]receber doacao:\n"
+    ).toUpperCase();
 
-      if(pessoa)
-      doador = pessoa.nome
-    }else{
-      doador = prompt( 'Informe o nome do doador: ',anonimo);
+    if (tipo == "R") {
+      this.pController.list(); //chama a lista de pessoas cadastradas para o usuario escolher 1
+      beneficiario = Number(
+        prompt("qual o id da pessoa que irá receber a doação:")
+      );
+      let pessoa: Pessoas | null = await this.pController.find(beneficiario);
+
+      if (pessoa) doador = pessoa.nome;
+    } else {
+      doador = prompt("Informe o nome do doador: ", anonimo);
     }
+
     this.cdController.list();
-    let cd: number = Number(prompt('Informe o ID do CD que será destinado a doação: '));
-    let idCd : CD | null= await this.cdController.find(cd);
+    let cd: number = Number(
+      prompt("Informe o ID do CD que será destinado a doação: ")
+    );
+    let idCd: CD | null = await this.cdController.find(cd);
+
+    this.itemController.list();
+    let idItem: number = Number(prompt("Informe o ID do item: "));
+    let idItens: Item | null = await this.itemController.find(idItem);
 
     let quantidade: number = Number(prompt("Quantidade: "));
-    
+
     //beneficiario
 
-    let m = await this.controller.create( tipo, quantidade, doador);
+    let m = await this.controller.create(tipo, quantidade, doador, idCd, idItens);
 
     console.log(`Movimentçao ID #${m.id_movimentacao} criada com sucesso!`);
   }
@@ -101,7 +115,13 @@ export class MovimentacoesMenu {
       let quantidade = Number(prompt(`Quantidade ${movimentacao.quantidade}`));
       let doador = prompt(`Quantidade ${movimentacao.quantidade}`);
 
-      movimentacao = await this.controller.edit(movimentacao, data_hora, tipo, quantidade, doador);
+      movimentacao = await this.controller.edit(
+        movimentacao,
+        data_hora,
+        tipo,
+        quantidade,
+        doador
+      );
       console.log(
         `Movimentação ID #${movimentacao.id_movimentacao} atualizado com sucesso!`
       );

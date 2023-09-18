@@ -1,3 +1,4 @@
+import { type } from 'os';
 import { Pessoas } from "./Pessoas";
 import {
   Entity,
@@ -14,7 +15,8 @@ export class Movimentacao extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_movimentacao: number;
 
-  @Column({ type: "timestamp" })
+  @Column({ type: "timestamp", 
+  default: "now()"})
   data_Hora: string;
 
   @Column({ length: 255 })
