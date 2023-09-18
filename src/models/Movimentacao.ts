@@ -15,7 +15,7 @@ export class Movimentacao extends BaseEntity {
   id_movimentacao: number;
 
   @Column({ type: "timestamp" })
-  data_Hora: Date;
+  data_Hora: string;
 
   @Column({ length: 255 })
   tipo: string;
