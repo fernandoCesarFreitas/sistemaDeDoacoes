@@ -7,7 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from "typeorm";
-import { CdItem } from "./cd_item"; // Importe a entidade CdItem aqui
+import { CdItem } from "./Cd_item"; // Importe a entidade CdItem aqui
 
 @Entity("movimentacoes")
 export class Movimentacao extends BaseEntity {
@@ -26,11 +26,17 @@ export class Movimentacao extends BaseEntity {
   @Column({ length: 255, nullable: true })
   doador: string;
 
-  @ManyToOne(() => Pessoas, { eager: true }) // Define a relação com a entidade Beneficiario
-  @JoinColumn({ name: "benificiario_idbenificiario" })
-  beneficiario: Pessoas;
+  @Column({})
+  public pessoas_id_pessoas: number;
 
-  @ManyToOne(() => CdItem, { eager: true }) // Define a relação com a entidade CdItem
+  @ManyToOne(() => Pessoas, (pessoas) => pessoas.pessoas) // Define a relação com a entidade Cidade
+  @JoinColumn({ name: "pessoas_id_pessoas" })
+  public pessoas: Pessoas;
+
+  @Column({})
+  public cd_item_idcd_item: number;
+
+  @ManyToOne(() => CdItem, (cd_item) => cd_item.cd_item)
   @JoinColumn({ name: "cd_item_idcd_item" })
-  cd_item: CdItem;
+  public cd_item: CdItem;
 }

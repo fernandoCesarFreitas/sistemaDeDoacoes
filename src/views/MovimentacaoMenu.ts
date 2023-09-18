@@ -1,15 +1,22 @@
+import { CD } from './../models/Cds';
+import { CdController } from './../controllers/CdController';
 import { MovimentacaoContrller } from "../controllers/MovimentacaoController";
 import PromptSync from "prompt-sync";
 import { Movimentacao } from "../models/Movimentacao";
+import { PessoasController } from "../controllers/PessoasController";
 import { Pessoas } from "../models/Pessoas";
 
 const prompt = PromptSync();
 
 export class MovimentacoesMenu {
   public controller: MovimentacaoContrller;
+  public pController: PessoasController;
+  public cdController: CdController;
 
   constructor() {
     this.controller = new MovimentacaoContrller();
+    this.pController = new PessoasController();
+    this.cdController =  new CdController();
   }
 
   public show() {
@@ -55,14 +62,33 @@ export class MovimentacoesMenu {
   }
 
   private async create(): Promise<void> {
-    let data_Hora: string = prompt("Data e hora: ");
-    let tipo: string = prompt("Tipo de movimentação: ");
-    let quantidade: number = Number(prompt("Categoria: "));
-    let doador: string = prompt("Categoria: ", 'Anônimo');
+    let anonimo: string = 'Anonimo';
+    let beneficiario:number;
+    let doador: string='';
+    
+    let tipo: string = prompt("Tipo de movimentação: \n[D]-efetuar doaçao\n[R]receber doacao:\n").toUpperCase();
 
-    let m = await this.controller.create(data_Hora, tipo, quantidade, doador);
+    if(tipo == 'R'){
+      this.pController.list();//chama a lista de pessoas cadastradas para o usuario escolher 1
+      beneficiario=Number(prompt('qual o id da pessoa que irá receber a doação:'));
+      let pessoa: Pessoas | null =await  this.pController.find(beneficiario);
 
-    console.log(`Beneficiário ID #${m.id_movimentacao} criando com sucesso!`);
+      if(pessoa)
+      doador = pessoa.nome
+    }else{
+      doador = prompt( 'Informe o nome do doador: ',anonimo);
+    }
+    this.cdController.list();
+    let cd: number = Number(prompt('Informe o ID do CD que será destinado a doação: '));
+    let idCd : CD | null= await this.cdController.find(cd);
+
+    let quantidade: number = Number(prompt("Quantidade: "));
+    
+    //beneficiario
+
+    let m = await this.controller.create( tipo, quantidade, doador);
+
+    console.log(`Movimentçao ID #${m.id_movimentacao} criada com sucesso!`);
   }
 
   private async edit(): Promise<void> {
