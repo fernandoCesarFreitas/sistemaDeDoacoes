@@ -7,6 +7,7 @@ import { MenuVoluntarios } from "./VoluntariosMenu";
 import { MenuCD } from "./MenuCd";
 import { CategoriasMenu } from "./CategoriasMenu";
 import { MenuItem } from "./MenuItens";
+import { MovimentacoesMenu } from './MovimentacaoMenu';
 import PromptSync from "prompt-sync";
 const prompt = PromptSync();
 
@@ -18,6 +19,7 @@ export class Menu {
   public menuCd: MenuCD;
   public menuCategorias: CategoriasMenu;
   public menuItem: MenuItem;
+  public movimentacoesMenu: MovimentacoesMenu;
 
   constructor() {
     this.menuPessoas = new PessoasMenu();
@@ -27,6 +29,8 @@ export class Menu {
     this.menuCd = new MenuCD();
     this.menuCategorias = new CategoriasMenu();
     this.menuItem = new MenuItem();
+    this.movimentacoesMenu = new MovimentacoesMenu();
+
   }
   async menu() {
     let cont: number = 0;
@@ -87,6 +91,10 @@ export class Menu {
               break;
               case 6:
               await this.menuItem.menuItens();
+              break;
+              case 7:
+                await this.movimentacoesMenu.show();
+                await this.movimentacoesMenu.execute();
               break;
             default:
               console.clear();
