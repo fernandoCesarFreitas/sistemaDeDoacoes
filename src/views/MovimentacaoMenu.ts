@@ -100,9 +100,9 @@ export class MovimentacoesMenu {
 
     //beneficiario
 
-    let m = await this.controller.create(tipo, quantidade, doador, idCd, idItens);
+    // let m = await this.controller.create(tipo, quantidade, doador, idCd., idItens);
 
-    console.log(`Movimentçao ID #${m.id_movimentacao} criada com sucesso!`);
+    // console.log(`Movimentçao ID #${m.id_movimentacao} criada com sucesso!`);
   }
 
   private async edit(): Promise<void> {

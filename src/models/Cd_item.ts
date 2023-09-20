@@ -1,7 +1,13 @@
+
 import { Item } from './Item';
 import { CD } from './Cds';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn,OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn,OneToMany, ManyToMany } from 'typeorm';
 import { Movimentacao } from './Movimentacao';
+
+
+
+
+
 
 @Entity('cd_item')
 export class CdItem extends BaseEntity {
@@ -25,7 +31,7 @@ export class CdItem extends BaseEntity {
   @Column({})
   public item_id_item: number;
 
-  @ManyToOne(() => Item, (item)=> item.item) // Define a relação com a entidade Item
+  @ManyToMany(() => Item, (item)=> item.item) // Define a relação com a entidade Item
   @JoinColumn({ name: 'item_id_item' })
   item: Item;
 }

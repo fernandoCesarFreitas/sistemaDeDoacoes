@@ -1,3 +1,5 @@
+
+
 import { CdItem } from './Cd_item';
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn,OneToMany } from 'typeorm';
 import { Cidade } from './Cidades';
