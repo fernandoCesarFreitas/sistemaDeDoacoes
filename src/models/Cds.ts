@@ -20,8 +20,8 @@ export class CD extends BaseEntity {
   @Column({})
   public cidade_id_cidade: number;
 
-  @OneToMany(() => CdItem, (cditem) => cditem.cd) //relacao com a tabela movimentacoes 1/n
-  public cd: Promise<CD[]>
+  @OneToMany(() => CdItem, (cdItem) => cdItem.cd)
+  cdItems: CdItem[];
 
 
   @ManyToOne(() => Cidade, (cidade) => cidade.cds) // Define a relação com a entidade Cidade

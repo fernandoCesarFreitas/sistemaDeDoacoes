@@ -15,8 +15,7 @@ export class Movimentacao extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_movimentacao: number;
 
-  @Column({ type: "timestamp", 
-  default: "now()"})
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   data_Hora: string;
 
   @Column({ length: 255 })
@@ -28,17 +27,21 @@ export class Movimentacao extends BaseEntity {
   @Column({ length: 255, nullable: true })
   doador: string;
 
-  @Column({})
+  @Column({nullable: true })
   public pessoas_id_pessoas: number;
 
-  @ManyToOne(() => Pessoas, (pessoas) => pessoas.pessoas) // Define a relação com a entidade Cidade
+  @ManyToOne(() => Pessoas, (pessoas) => pessoas.pessoas,{eager:true}) // Define a relação com a entidade Cidade
   @JoinColumn({ name: "pessoas_id_pessoas" })
   public pessoas: Pessoas;
 
-  @Column({})
+  @Column({nullable: true})
   public cd_item_idcd_item: number;
 
-  @ManyToOne(() => CdItem, (cd_item) => cd_item.cd_item)
+  @ManyToOne(() => CdItem, (cdItem) => cdItem.movimentacao,{eager:true})
   @JoinColumn({ name: "cd_item_idcd_item" })
-  public cd_item: CdItem;
+  cdItem: CdItem;
+
+  // @ManyToOne(() => CdItem, (cd_item) => cd_item.cd_item)
+  // @JoinColumn({ name: "cd_item_idcd_item" })
+  // public cd_item: CdItem;
 }

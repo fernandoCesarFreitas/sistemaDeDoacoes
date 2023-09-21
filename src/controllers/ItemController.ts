@@ -2,6 +2,7 @@ import { Item } from "../models/Item";
 let item: Item = new Item();
 
 export class ItemController {
+  
   async list(): Promise<Item[]> {
     return await Item.find({});
   }

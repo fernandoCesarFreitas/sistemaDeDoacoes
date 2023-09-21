@@ -19,17 +19,17 @@ export class Item extends BaseEntity {
   @Column({})
   public categoria_id_categoria: number;
 
-  // @OneToMany(() => CdItem, (cdItem) => cdItem.item) //relacao com a tabela CD 1/n
-  // public item: Promise<CdItem[]>;
+  @OneToMany(() => CdItem, (cdItem) => cdItem.item)
+  cdItems: CdItem[];
 
 
   @ManyToOne(() => Categoria, (categoria) => categoria.categoria) // Define a relação com a entidade Cidade
   @JoinColumn({ name: 'categoria_id_categoria' })
   public categoria: Categoria;
 
-  @ManyToMany(() => CdItem, (cditen)=> cditen.item) // Define a relação com a entidade Item
-  @JoinColumn({ name: 'item_id_item' })
-  item: CdItem;
+  // @ManyToMany(() => CdItem, (cditen)=> cditen.item) // Define a relação com a entidade Item
+  // @JoinColumn({ name: 'item_id_item' })
+  // item: CdItem;
 }
 
 //nullable: true 

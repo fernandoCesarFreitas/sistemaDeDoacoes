@@ -7,6 +7,7 @@ import { Movimentacao } from "../models/Movimentacao";
 import { PessoasController } from "../controllers/PessoasController";
 import { Pessoas } from "../models/Pessoas";
 import { Item } from "../models/Item";
+import { table } from "console";
 
 const prompt = PromptSync();
 
@@ -75,7 +76,8 @@ export class MovimentacoesMenu {
     ).toUpperCase();
 
     if (tipo == "R") {
-      this.pController.list(); //chama a lista de pessoas cadastradas para o usuario escolher 1
+      let pessoas : Pessoas []=await this.pController.list(); //chama a lista de pessoas cadastradas para o usuario escolher 1
+      console.table(pessoas);
       beneficiario = Number(
         prompt("qual o id da pessoa que irá receber a doação:")
       );
@@ -86,23 +88,37 @@ export class MovimentacoesMenu {
       doador = prompt("Informe o nome do doador: ", anonimo);
     }
 
-    this.cdController.list();
+    let cds: CD[] =await this.cdController.list();
+    console.table(cds)
     let cd: number = Number(
       prompt("Informe o ID do CD que será destinado a doação: ")
     );
-    let idCd: CD | null = await this.cdController.find(cd);
 
-    this.itemController.list();
+    let cd1: CD | null = await this.cdController.find(cd);
+      console.table(cd1);
+    let itens: Item[]=await this.itemController.list();
+    console.table(itens)
     let idItem: number = Number(prompt("Informe o ID do item: "));
-    let idItens: Item | null = await this.itemController.find(idItem);
-
+    let itens1: Item | null = await this.itemController.find(idItem);
+      console.table(itens1)
     let quantidade: number = Number(prompt("Quantidade: "));
 
-    //beneficiario
-
-    // let m = await this.controller.create(tipo, quantidade, doador, idCd., idItens);
-
-    // console.log(`Movimentçao ID #${m.id_movimentacao} criada com sucesso!`);
+    if (cd1 != null && itens1 != null) {
+      try {
+        const m: Movimentacao = await this.controller.create(
+          tipo,
+          quantidade,
+          doador,
+          cd1,
+          itens1,
+          
+        );
+      
+        console.log(`Movimentação ID #${m.id_movimentacao} criada com sucesso!`);
+      } catch (error) {
+        console.error('Erro ao criar a movimentação:', error);
+      }
+    }
   }
 
   private async edit(): Promise<void> {
