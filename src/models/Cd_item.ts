@@ -31,12 +31,16 @@ export class CdItem extends BaseEntity {
   @JoinColumn({ name: "item_id" })
   item: Item;
 
-  @Column({})
-  public movimentacao_id: number;
+  // @Column({})
+  // public movimentacao_id: number;
 
-  @ManyToOne(() => Movimentacao, (movimentacao) => movimentacao.cdItem)
-  @JoinColumn({ name: "movimentacao_id" })
-  movimentacao: Movimentacao;
+  // @ManyToOne(() => Movimentacao, (movimentacao) => movimentacao.cdItem)
+  // @JoinColumn({ name: "movimentacao_id" })
+  // movimentacao: Movimentacao;
+  @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.cdItem)
+movimentacoes: Movimentacao[];
+  
+
 
   @Column()
   quantidade: number;

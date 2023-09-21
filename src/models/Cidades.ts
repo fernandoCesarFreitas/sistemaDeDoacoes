@@ -20,9 +20,9 @@ export class Cidade extends BaseEntity {
   })
   public situacao: string;
 
-  @OneToMany(() => CD, (cd) => cd.cidade) //relacao com a tabela CD 1/n
+  @OneToMany(() => CD, (cd) => cd.cidade)
   public cds: Promise<CD[]>;
 
-  @OneToMany(() => Pessoas, (pessoa) => pessoa.cidade) //relacao com a tabela beneficiario 1/n
+  @OneToMany(() => Pessoas, (pessoa) => pessoa.cidade)
   public pessoas: Promise<Pessoas[]>;
 }

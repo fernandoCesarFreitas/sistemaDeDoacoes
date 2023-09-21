@@ -1,16 +1,15 @@
 import { Movimentacao } from "../models/Movimentacao";
-import { Pessoas } from "../models/Pessoas";
 import { CdItem } from "../models/Cd_item";
-// import { getRepository } from "typeorm";
 import { CD } from "../models/Cds";
 import { Item } from "../models/Item";
-let movimentacao: Movimentacao = new Movimentacao();
+import PromptSync from "prompt-sync";
+import { getConnection } from "typeorm";
+
+const prompt = PromptSync();
 export class MovimentacaoContrller {
   async list() {
     return await Movimentacao.find();
   }
-
-  // private movimentacaoRepository = getRepository(Movimentacao);
 
   async create(
     tipo: string,
@@ -19,42 +18,43 @@ export class MovimentacaoContrller {
     idCd: CD,
     idItem: Item
   ): Promise<Movimentacao> {
-     const cdItem = new CdItem();
-  cdItem.cd = idCd;
-  cdItem.item = idItem;
-  cdItem.quantidade = quantidade;
+    const cdItem = new CdItem();
+    cdItem.cd = idCd;
+    cdItem.item = idItem;
+    cdItem.quantidade = quantidade;
 
-   const movimentacao = new Movimentacao();
-  movimentacao.tipo = tipo;
-  movimentacao.quantidade = quantidade;
-  movimentacao.doador = doador;
-  movimentacao.cdItem = cdItem;
+    const movimentacao = new Movimentacao();
+    movimentacao.tipo = tipo;
+    movimentacao.quantidade = quantidade;
+    movimentacao.doador = doador;
+    movimentacao.cdItem = cdItem;
 
-    // const movimentacao = new Movimentacao();
-    // movimentacao.tipo = tipo;
-    // movimentacao.quantidade = quantidade;
-    // movimentacao.doador = doador;
-
-    // movimentacao.cdItem = new CdItem();
-
-    // movimentacao.cdItem.cd = idCd;
-    // movimentacao.cdItem.item = idItem;
-
-    // Você precisa encontrar o Cd e o Item com base nos IDs fornecidos
-    // Certifique-se de ajustar a lógica para encontrar esses objetos no seu banco de dados
-    // Exemplo:
-    // const cd = await this.cdRepository.findOne(idCd);
-    // const item = await this.itemRepository.findOne(idItem);
-
-    // Depois de encontrar o Cd e o Item, associe-os ao CdItem e, em seguida, à Movimentacao
-    // Certifique-se de ajustar isso de acordo com a estrutura real do seu modelo de dados
-    // Exemplo:
-    // movimentacao.cdItem = new CdItem();
-    // movimentacao.cdItem.cd = cd;
-    // movimentacao.cdItem.item = item;
-
-    // Salve a Movimentacao no banco de dados
+    // Salvar os objetos
+    await cdItem.save();
     await movimentacao.save();
+
+    // Encontre o CD_Item associado ao CD e ao Item
+
+    if (!cdItem.cd) {
+      throw new Error("CD_Item associado não encontrado");
+    }
+
+    // Verificar o tipo e atualizar a quantidade no CD_Item
+    if (tipo === "D") {
+      // Se for uma doação, adicione a quantidade ao CD_Item
+      cdItem.quantidade += quantidade;
+    } else if (tipo === "R") {
+      // Se for uma recepção, subtraia a quantidade do CD_Item
+      cdItem.quantidade -= quantidade;
+
+      // Certifique-se de que a quantidade não fique negativa
+      if (cdItem.quantidade < 0) {
+        throw new Error("Quantidade no CD_Item não pode ser negativa");
+      }
+    }
+
+    // Salvar as alterações no CD_Item
+    await cdItem.save();
 
     return movimentacao;
   }
@@ -63,19 +63,28 @@ export class MovimentacaoContrller {
   //   tipo: string,
   //   quantidade: number,
   //   doador: string,
-  //   idCds: number,
-  //   idItem: number
+  //   cd: CD,
+  //   item: Item
   // ): Promise<Movimentacao> {
+  //   const cdItem = new CdItem();
+  //   cdItem.cd = cd;
+  //   cdItem.item = item;
+  //   cdItem.quantidade = quantidade;
+
+  //   const movimentacao = new Movimentacao();
   //   movimentacao.tipo = tipo;
   //   movimentacao.quantidade = quantidade;
   //   movimentacao.doador = doador;
-  //   movimentacao.cd_item_idcd_item = idCds;
-  //   movimentacao.cd_item_idcd_item = idItem;
-  //   // tipo,
-  //   // quantidade,
-  //   // doador,
-  //   await movimentacao.save();
-  //   return movimentacao;
+  //   movimentacao.cdItem = cdItem;
+
+  //   try {
+  //     await cdItem.save();
+  //     await movimentacao.save();
+
+  //     return movimentacao;
+  //   } catch (error) {
+  //     throw error;
+  //   }
   // }
 
   async find(id_movimentacao: number) {
@@ -100,5 +109,153 @@ export class MovimentacaoContrller {
 
   async delete(movimentacao: Movimentacao): Promise<void> {
     await movimentacao.remove();
+  }
+
+  async relatorioCategoria() {
+    let cd2 = Number(prompt("Informe ID do CD que deseja listar: "));
+
+    try {
+      // Verifique se o CD com o ID especificado existe
+      const cd = await CD.findOne({ where: { id_CD: cd2 } });
+
+      if (cd) {
+        // Encontre todos os itens associados a este CD
+        let itensAssociados = await CdItem.find({
+          where: {
+            cd: {
+              id_CD: cd2,
+            },
+          },
+          relations: ["item"], // Carregue a relação "item" para obter detalhes do item
+        });
+
+        if (itensAssociados.length === 0) {
+          console.log(`Nenhum item associado ao CD #${cd2}.`);
+        } else {
+          console.log(`Itens associados ao CD #${cd2}:`);
+          console.table(
+            itensAssociados.map((cdItem) => ({
+              Item: cdItem.item.nome, // Substitua pelo nome do campo de nome do item
+              Quantidade: cdItem.quantidade,
+            }))
+          );
+        }
+      } else {
+        console.log(`CD com ID ${cd2} não encontrado.`);
+      }
+    } catch (error) {
+      console.error("Erro ao gerar o relatório:", error);
+    }
+
+    try {
+      // Encontre todos os CdItems associados a este CD
+      let cdItems = await CdItem.find({
+        where: {
+          cd: {
+            id_CD: cd2,
+          },
+        },
+        relations: ["item"], // Carregue a relação "item" para obter detalhes do item
+      });
+
+      if (cdItems.length === 0) {
+        console.log(`O CD com ID ${cd2} não possui nenhum item associado.`);
+      } else {
+        console.log(`Itens no CD com ID ${cd2}:`);
+        cdItems.forEach((cdItem) => {
+          console.log(
+            `Nome do Item: ${cdItem.item.nome}, Quantidade: ${cdItem.quantidade}`
+          );
+        });
+      }
+    } catch (error) {
+      console.error(
+        "Erro ao calcular a quantidade total de itens no CD:",
+        error
+      );
+    }
+  }
+
+  async listarQuantidadeTotalDeItensEmUmCD() {
+    try {
+      let cdId: number = Number(prompt("Informe ID do CD que deseja listar: "));
+      const cdItems = await CdItem.find({
+        where: { cd_id: cdId },
+        relations: ["item"], // Certifique-se de que a relação "item" esteja definida na entidade CdItem
+      });
+
+      if (cdItems.length === 0) {
+        console.log(`Nenhum item encontrado no CD #${cdId}.`);
+      } else {
+        console.log(`Quantidade total de itens no CD #${cdId}:`);
+        const itemQuantidades: { [nome: string]: number } = {};
+
+        cdItems.forEach((cdItem) => {
+          const itemName = cdItem.item.nome;
+          if (itemQuantidades[itemName]) {
+            itemQuantidades[itemName] += cdItem.quantidade;
+          } else {
+            itemQuantidades[itemName] = cdItem.quantidade;
+          }
+        });
+
+        for (const itemName in itemQuantidades) {
+          console.log(
+            `Nome: ${itemName}, Quantidade Total: ${itemQuantidades[itemName]}`
+          );
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Erro ao listar a quantidade total de itens no CD #:`,
+        error
+      );
+    }
+  }
+
+  async listarQuantidadeTotalDeItensEmTodosOsCDs() {
+    try {
+      const cdItemRepository = CdItem;
+
+      const query = `
+      SELECT
+        item.nome AS nome_item,
+        SUM(cd_item.quantidade) AS quantidade_total
+      FROM
+        cd_item
+      INNER JOIN
+        item ON item.id_item = cd_item.item_id
+      GROUP BY
+        item.nome
+    `;
+
+      const result = await cdItemRepository
+        .createQueryBuilder("cdItem")
+        .select([
+          "item.nome AS nome_item",
+          "SUM(cdItem.quantidade) AS quantidade_total",
+        ])
+        .innerJoin("cdItem.item", "item")
+        .groupBy("item.nome")
+        .getRawMany();
+
+      if (result.length === 0) {
+        console.log("Nenhum item encontrado.");
+      } else {
+        console.log("Quantidade total de itens em todos os CDs:");
+        result.forEach(
+          (row: { nome_item: string; quantidade_total: number }) => {
+            console.log(
+              `Nome: ${row.nome_item}, Quantidade Total: ${row.quantidade_total}`
+            );
+          }
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Erro ao listar a quantidade total de itens em todos os CDs:",
+        error
+      );
+    }
   }
 }
