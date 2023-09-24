@@ -23,9 +23,19 @@ export class Item extends BaseEntity {
   cdItems: CdItem[];
 
 
-  @ManyToOne(() => Categoria, (categoria) => categoria.categoria) // Define a relação com a entidade Cidade
+  @ManyToOne(() => Categoria, (categoria) => categoria.itens) // Define a relação com a entidade Cidade
   @JoinColumn({ name: 'categoria_id_categoria' })
   public categoria: Categoria;
+
+  toJSON(): Record<string, any> {
+    return {
+      id_item: this.id_item,
+      nome: this.nome,
+      situacao: this.situacao,
+      categoria_id_categoria: this.categoria_id_categoria,
+      categoria: this.categoria ? this.categoria.toJSON() : null,
+    };
+  }
 
   // @ManyToMany(() => CdItem, (cditen)=> cditen.item) // Define a relação com a entidade Item
   // @JoinColumn({ name: 'item_id_item' })

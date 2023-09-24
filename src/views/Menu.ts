@@ -34,30 +34,30 @@ export class Menu {
   }
   async menu() {
     let cont: number = 0;
-    while (cont < 3) {
-      //*
-      let nome: string = prompt("Nome: "); //*
-      let senha: string = prompt("Senha: "); //*
+    // while (cont < 3) {
+    //   //*
+    //   let nome: string = prompt("Nome: "); //*
+    //   let senha: string = prompt("Senha: "); //*
 
-      let ok; //*
+    //   let ok; //*
 
-      let okU: Voluntario | null = await this.voluntarioController.checker(
-        nome
-      ); //*
+    //   let okU: Voluntario | null = await this.voluntarioController.checker(
+    //     nome
+    //   ); //*
 
-      if (okU) {
-        //*
-        ok = this.voluntarioController.checkPassword(senha, okU.senha); //*
-      } //*
+    //   if (okU) {
+    //     //*
+    //     ok = this.voluntarioController.checkPassword(senha, okU.senha); //*
+    //   } //*
 
-      if (ok && okU != null) {
-        //*
-        this.voluntarioController.setusuarioLogado(okU); //*
+    //   if (ok && okU != null) {
+    //     //*
+    //     this.voluntarioController.setusuarioLogado(okU); //*
         cont = 3;
         let input: number = 0;
         do {
           console.clear();
-          console.log(`Bem-vindo ${okU.nome}`); //*
+          // console.log(`Bem-vindo ${okU.nome}`); //*
           console.log(
             "*======* CONTROLE DE DOAÇÕES *======*\n" +
               "[1]- Voluntários\n" +
@@ -98,7 +98,7 @@ export class Menu {
               break;
             default:
               console.clear();
-              console.log(`Até logo ${okU.nome}!`); //*
+              // console.log(`Até logo ${okU.nome}!`); //*
               break;
           }
 
@@ -106,15 +106,15 @@ export class Menu {
             prompt("presione qualquer tecla para continuar");
           }
         } while (input != 0);
-      } else {
-        //*
-        console.log("Usuário ou senha inválidos"); //*
-      } //*
-      if (cont > 3) {
-        //*
-        console.log(`Voce possui mais ${2 - cont}, tentativas!`); //*
-      } //*
-      cont++; //*
-    } //*
+      // } else {
+    //     //*
+    //     console.log("Usuário ou senha inválidos"); //*
+    //   } //*
+    //   if (cont > 3) {
+    //     //*
+    //     console.log(`Voce possui mais ${2 - cont}, tentativas!`); //*
+    //   } //*
+    //   cont++; //*
+    // } //*
   }
 }

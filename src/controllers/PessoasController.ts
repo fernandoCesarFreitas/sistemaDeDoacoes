@@ -3,7 +3,7 @@ let pessoa: Pessoas = new Pessoas();
 
 export class PessoasController {
   async list() {
-    return await Pessoas.find();
+    return await Pessoas.find({ relations: ["cidade"] });
   }
 
   async find(idPessoa: number) {

@@ -16,12 +16,14 @@ export class MovimentacoesMenu {
   public pController: PessoasController;
   public cdController: CdController;
   public itemController: ItemController;
+  public movimentacao :Movimentacao;
 
   constructor() {
     this.controller = new MovimentacaoContrller();
     this.pController = new PessoasController();
     this.cdController = new CdController();
     this.itemController = new ItemController();
+    this.movimentacao =  new Movimentacao();
   }
 
   public show() {
@@ -75,13 +77,16 @@ export class MovimentacoesMenu {
 
   private async list(): Promise<void> {
     let movimentacoes = await this.controller.list();
+    const movimentacaoJSON = JSON.stringify(this.movimentacao.toJSON(), null, 2);
+    console.log(movimentacoes);
     console.table(movimentacoes);
+    console.log(movimentacaoJSON);
   }
 
   private async create(): Promise<void> {
     let anonimo: string = "Anônimo";
     let beneficiario: number | null = null;
-    let doador: string = "";
+    let doador: string | null= null;
 
     let tipo: string = prompt(
       "Tipo de movimentação:\n[D] - Efetuar doação\n[R] - Receber doação:\n"
@@ -108,7 +113,7 @@ export class MovimentacoesMenu {
         );
         if (pessoa) {
           beneficiario = pessoa.idPessoa;
-          doador = pessoa.nome;
+          
         } else {
           console.log(
             "ID de beneficiário não encontrado. Tente novamente ou pressione 0 para cancelar."
@@ -164,8 +169,9 @@ export class MovimentacoesMenu {
         tipo,
         quantidade,
         doador,
+        beneficiario,
         cd,
-        item
+        item,
       );
 
       console.log(`Movimentação ID #${m.id_movimentacao} criada com sucesso!`);

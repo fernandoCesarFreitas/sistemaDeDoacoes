@@ -44,7 +44,17 @@ movimentacoes: Movimentacao[];
 
   @Column()
   quantidade: number;
-}
+
+  toJSON(): Record<string, any> {
+    return {
+      id: this.id,
+      cd_id: this.cd_id,
+      item_id: this.item_id,
+      cd: this.cd ? this.cd.toJSON() : null,
+      item: this.item ? this.item.toJSON() : null,
+      quantidade: this.quantidade,
+    };
+  }
 
 // @Entity('cd_item')
 // export class CdItem extends BaseEntity {
@@ -74,4 +84,4 @@ movimentacoes: Movimentacao[];
 // //   @ManyToMany(() => Item, (item)=> item.item) // Define a relação com a entidade Item
 // //   @JoinColumn({ name: 'item_id_item' })
 // //   item: Item;
-// }
+}

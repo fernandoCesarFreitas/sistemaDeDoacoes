@@ -8,6 +8,14 @@ export class Categoria extends BaseEntity {
   @Column({ length: 255 })
   descricao: string;
 
-  @OneToMany(() => Item, (item) => item.categoria) //relacao com a tabela CD 1/n
-  public categoria: Promise<Item[]>;
+  @OneToMany(() => Item, (item) => item.categoria)
+  itens: Item[];
+
+   toJSON(): Record<string, any> {
+    return {
+      id_categoria: this.id_categoria,
+      descricao: this.descricao,
+      itens: this.itens ? this.itens.map((item) => item.toJSON()) : [],
+    };
+  }
 }

@@ -27,4 +27,14 @@ export class CD extends BaseEntity {
   @ManyToOne(() => Cidade, (cidade) => cidade.cds) // Define a relação com a entidade Cidade
   @JoinColumn({ name: 'cidade_id_cidade' })
   public cidade: Cidade;
+
+  toJSON(): Record<string, any> {
+    return {
+      id_CD: this.id_CD,
+      nome: this.nome,
+      situacao: this.situacao,
+      cidade_id_cidade: this.cidade_id_cidade,
+      cidade: this.cidade ? this.cidade.toJSON() : null,
+    };
+  }
 }

@@ -54,6 +54,7 @@ export class PessoasMenu {
 
   private async list(): Promise<void> {
     let pessoas = await this.controller.list();
+    console.log(pessoas);
     console.table(pessoas);
   }
 

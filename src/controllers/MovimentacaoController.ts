@@ -3,18 +3,22 @@ import { CdItem } from "../models/Cd_item";
 import { CD } from "../models/Cds";
 import { Item } from "../models/Item";
 import PromptSync from "prompt-sync";
-import { getConnection } from "typeorm";
 
 const prompt = PromptSync();
 export class MovimentacaoContrller {
+
   async list() {
-    return await Movimentacao.find();
+    return await Movimentacao.find({
+      relations:[ "cdItem", "pess0oas"]
+    });
+    
   }
 
   async create(
     tipo: string,
     quantidade: number,
-    doador: string,
+    doador: string|null,
+    beneficiarioId: number|null,
     idCd: CD,
     idItem: Item
   ): Promise<Movimentacao> {
@@ -26,8 +30,15 @@ export class MovimentacaoContrller {
     const movimentacao = new Movimentacao();
     movimentacao.tipo = tipo;
     movimentacao.quantidade = quantidade;
-    movimentacao.doador = doador;
     movimentacao.cdItem = cdItem;
+
+
+    if(doador!=null)
+      movimentacao.doador = doador;
+
+    if(beneficiarioId!=null)
+      movimentacao.pessoas_id_pessoas=beneficiarioId;
+    
 
     // Salvar os objetos
     await cdItem.save();
