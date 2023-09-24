@@ -3,69 +3,123 @@ import { CdItem } from "../models/Cd_item";
 import { CD } from "../models/Cds";
 import { Item } from "../models/Item";
 import PromptSync from "prompt-sync";
+let cdItem = new CdItem();
+
 
 const prompt = PromptSync();
 export class MovimentacaoContrller {
-
   async list() {
     return await Movimentacao.find({
-      relations:[ "cdItem", "pess0oas"]
+      relations: ["cdItem", "pessoas"],
     });
-    
   }
-
   async create(
     tipo: string,
     quantidade: number,
-    doador: string|null,
-    beneficiarioId: number|null,
+    doador: string | null,
+    beneficiarioId: number | null,
     idCd: CD,
     idItem: Item
   ): Promise<Movimentacao> {
-    const cdItem = new CdItem();
+    let cdItems = await CdItem.find({ where: { cd: { id_CD: idCd.id_CD } } });
+    let quantidadeTotal = cdItems.reduce(
+      (total, cdItem) => total + cdItem.quantidade,
+      0
+    );
+    
+    if (!cdItem) {
+      cdItem = new CdItem();
+      cdItem.cd = idCd;
+      cdItem.item = idItem;
+      cdItem.quantidade = 0;
+      await cdItem.save();
+      let movimentacao = new Movimentacao();
+      movimentacao.tipo = tipo;
+      movimentacao.quantidade = quantidade;
+      // movimentacao.pessoas_id_pessoas = beneficiarioId;
+      movimentacao.cdItem = cdItem;
+      await movimentacao.save();
+    }
+
+    // console.log(cdItems);
+    console.log(quantidadeTotal + "quantidade total");
     cdItem.cd = idCd;
     cdItem.item = idItem;
-    cdItem.quantidade = quantidade;
-
-    const movimentacao = new Movimentacao();
-    movimentacao.tipo = tipo;
-    movimentacao.quantidade = quantidade;
-    movimentacao.cdItem = cdItem;
-
-
-    if(doador!=null)
-      movimentacao.doador = doador;
-
-    if(beneficiarioId!=null)
-      movimentacao.pessoas_id_pessoas=beneficiarioId;
+    if (tipo == "D") {
+      cdItem.cd = idCd;
+      cdItem.item = idItem;
+      cdItem.quantidade = 0;
+      await cdItem.save();
+      quantidadeTotal += quantidade;
+      console.log('quantidade dentro D'+quantidadeTotal)
+      cdItem.quantidade = quantidadeTotal;
+      await cdItem.save();
+      let movimentacao = new Movimentacao();
+      movimentacao.tipo = tipo;
+      movimentacao.quantidade = quantidade;
+      movimentacao.cdItem = cdItem;
+      await movimentacao.save();
     
+    }
+
+
+    if (tipo == "R") {
+      cdItem.cd = idCd;
+      cdItem.item = idItem;
+      quantidadeTotal -= quantidade;
+      console.log('quantidade total dentro R'+quantidadeTotal)
+      cdItem.quantidade = 0;
+      // console.log(
+      //    quantidade + "quantidade total dentro do R"
+      // );
+      await cdItem.save();
+      console.log(cdItem.quantidade+ 'antes de salvar no bd')
+      cdItem.quantidade = quantidadeTotal;
+      await cdItem.save();
+      await console.log(
+        cdItem.quantidade + "quantidade que esta sendo salva no db cd_item.quantidade no R"
+        
+      );
+      let movimentacao = new Movimentacao();
+      movimentacao.tipo = tipo;
+      movimentacao.quantidade = quantidade * -1;
+      movimentacao.cdItem = cdItem;
+      await movimentacao.save();
+    }
+
+   
+
+    if (doador !== null) {
+      movimentacao.doador = doador;
+    }
+
+    if (beneficiarioId !== null) {
+      movimentacao.pessoas_id_pessoas = beneficiarioId;
+    }
 
     // Salvar os objetos
-    await cdItem.save();
-    await movimentacao.save();
+    // await cdItem.save();
 
     // Encontre o CD_Item associado ao CD e ao Item
-
     if (!cdItem.cd) {
       throw new Error("CD_Item associado não encontrado");
     }
 
-    // Verificar o tipo e atualizar a quantidade no CD_Item
-    if (tipo === "D") {
-      // Se for uma doação, adicione a quantidade ao CD_Item
-      cdItem.quantidade += quantidade;
-    } else if (tipo === "R") {
-      // Se for uma recepção, subtraia a quantidade do CD_Item
-      cdItem.quantidade -= quantidade;
-
-      // Certifique-se de que a quantidade não fique negativa
-      if (cdItem.quantidade < 0) {
-        throw new Error("Quantidade no CD_Item não pode ser negativa");
-      }
-    }
+    // // Atualizar o total das quantidades no CD_Item
+    // if (tipo === "D") {
+    //   // Se for uma doação, adicione a quantidade ao CD_Item
+    //   cdItem.quantidade += quantidade;
+    // } else if (tipo === "R") {
+    //   // Se for uma recepção, subtraia a quantidade do CD_Item
+    //   cdItem.quantidade -= quantidade;
+    //   // Certifique-se de que a quantidade não fique negativa
+    // if (cdItem.quantidade < 0) {
+    //   throw new Error("Quantidade no CD_Item não pode ser negativa");
+    // }
+    // }
 
     // Salvar as alterações no CD_Item
-    await cdItem.save();
+    
 
     return movimentacao;
   }
