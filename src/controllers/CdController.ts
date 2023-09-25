@@ -6,8 +6,6 @@ export class CdController {
       return await CD.find({ where: { situacao: "A" }, relations: ["cidade", "cdItems"] });
       }
 
-
-
       async create(
         nome: string,
         situacao: string,

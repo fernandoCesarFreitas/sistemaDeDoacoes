@@ -54,7 +54,6 @@ export class MenuCD {
   }
 
   private async create(): Promise<void> {
-    // await this.list();
     let nome: string = prompt("Nome: ");
     let situacao: string = "A";
 
@@ -69,9 +68,6 @@ export class MenuCD {
       throw new Error("Cidade não encontrada!");
     }
 
-    //   let cd: CD = await this.controller.create(nome, situacao,catId);
-    //   console.log(`CD #${cd.id_CD} criado com sucesso!`);
-    // }
     try {
       let cd: CD = await this.controller.create(
         nome,

@@ -25,7 +25,7 @@ export class MovimentacaoContrller {
     // fizemos desta forma para garantir que sera criado uma nova instancia toda vez que for criado uma nova movimentação
     let cdItem = new CdItem();
     let movimentacao = new Movimentacao();
-    
+
     //uso para calcular a quantidade total de itens
     let cdItems = await CdItem.find({ where: { cd: { id_CD: idCd.id_CD } } });
     let quantidadeTotal = cdItems.reduce(
@@ -46,18 +46,20 @@ export class MovimentacaoContrller {
     //se tido for R entao atribuimos quantidade -
     if (tipo == "R") {
       quantidadeTotal -= quantidade;
-      if(quantidadeTotal<0){
-        throw new Error('Quantidade indicada para doação maior que a quantidade disponivel');
-      }else{
+      if (quantidadeTotal < 0) {
+        throw new Error(
+          "Quantidade indicada para doação maior que a quantidade disponivel"
+        );
+      } else {
         cdItem.quantidade = quantidade * -1;
         movimentacao.quantidade = quantidade * -1;
       }
     }
-    // se doador vier com algum valor atribuido 
+    // se doador vier com algum valor atribuido
     if (doador != null) {
       movimentacao.doador = doador;
     }
-    // se beneficiario vier com algum valor atribuido 
+    // se beneficiario vier com algum valor atribuido
     if (beneficiarioId != null) {
       movimentacao.pessoas_id_pessoas = beneficiarioId;
     }
@@ -87,40 +89,62 @@ export class MovimentacaoContrller {
       (total, cdItem) => total + cdItem.quantidade,
       0
     );
+    let id: number = await movimentacao.cd_item_idcd_item;
+    let cdItem = await movimentacao.cdItem;
 
-    cdItem.cd = idCd;
-    cdItem.item = idItem;
+    let cdItem1: CdItem | null = await CdItem.findOneBy({ id });
+
+    if (cdItem1) {
+      cdItem1.cd = idCd;
+      cdItem1.item = idItem;
+    }
+
+    if (!cdItem1) {
+      throw new Error("CD_Item associado não encontrado");
+    }
+
     if (tipo == "D") {
       quantidadeTotal += quantidade;
-      cdItem.quantidade = quantidade;
+      cdItem1.quantidade = quantidade;
       movimentacao.quantidade = quantidade;
     }
 
     if (tipo == "R") {
       quantidadeTotal -= quantidade;
-      if(quantidadeTotal<0){
-        throw new Error('Quantidade indicada para doação maior que a quantidade disponivel');
-      }else{
-        cdItem.quantidade = quantidade * -1;
+      if (quantidadeTotal < 0) {
+        throw new Error(
+          "Quantidade indicada para doação maior que a quantidade disponível"
+        );
+      } else {
+        cdItem1.quantidade = quantidade * -1;
         movimentacao.quantidade = quantidade * -1;
       }
     }
 
     movimentacao.tipo = tipo;
     movimentacao.quantidade = quantidade;
+
     if (doador != null) {
       movimentacao.doador = doador;
     }
+
     if (beneficiarioId != null) {
       movimentacao.pessoas_id_pessoas = beneficiarioId;
     }
+
+    // Salve as alterações no cd_item e na movimentação
+    await cdItem1.save();
     await movimentacao.save();
-    await cdItem.save();
+
     return movimentacao;
   }
 
   async delete(movimentacao: Movimentacao): Promise<void> {
+    let id: number = await movimentacao.cd_item_idcd_item;
+    let cdItem1: CdItem | null = await CdItem.findOneBy({ id });
     await movimentacao.remove();
+    if (cdItem1) 
+    await cdItem1.remove();
   }
 
   async relatorioCategoria() {

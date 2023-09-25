@@ -186,7 +186,7 @@ export class MovimentacoesMenu {
     let anonimo: string = "Anônimo";
     let beneficiario: number | null = null;
     let doador: string | null = null;
-
+    await this.list();
     let id: number = Number(prompt("Informe o ID da movimentação:"));
     let movimentacao: Movimentacao | null = await this.controller.find(id);
 
@@ -285,11 +285,15 @@ export class MovimentacoesMenu {
 
   
   private async delete(): Promise<void> {
+    await this.list();
     let id: number = Number(prompt("Informe o ID da movimentação:"));
     let movimentacao: Movimentacao | null = await this.controller.find(id);
 
     if (movimentacao) {
-      await this.controller.delete(movimentacao);
+      let confirmacao:string =prompt('Deseja realmente excluir essa movimentação?[s/n]').toUpperCase();
+      if(confirmacao == 'S'){
+        await this.controller.delete(movimentacao);
+      }
       console.log(`Movimentação ID#${id} excluída com sucesso!`);
     } else {
       console.log("Movimentação não encontrada");

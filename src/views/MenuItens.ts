@@ -56,7 +56,6 @@ export class MenuItem {
   }
 
   private async create(): Promise<void> {
-    // await this.list();
     let nome: string = prompt("Nome: ");
     let situacao: string = "A";
 
@@ -71,9 +70,6 @@ export class MenuItem {
       throw new Error("Categoria não encontrada!");
     }
 
-    //   let cd: CD = await this.controller.create(nome, situacao,catId);
-    //   console.log(`CD #${cd.id_CD} criado com sucesso!`);
-    // }
     try {
       let item: Item = await this.controller.create(
         nome,
