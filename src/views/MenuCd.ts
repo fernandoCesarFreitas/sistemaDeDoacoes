@@ -49,6 +49,7 @@ export class MenuCD {
 
   private async list(): Promise<void> {
     let cd: CD[] = await this.controller.list();
+    console.log(cd)
     console.table(cd);
   }
 

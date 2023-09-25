@@ -4,7 +4,7 @@ let item: Item = new Item();
 export class ItemController {
   
   async list(): Promise<Item[]> {
-    return await Item.find({});
+    return await Item.find({relations: ['categoria', 'cdItems',],where:{situacao: "A" }});
   }
 
   async create(

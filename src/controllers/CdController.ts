@@ -3,7 +3,7 @@ let cd: CD = new CD();
 
 export class CdController {
   async list(): Promise<CD[]> {
-      return await CD.find({ where: { situacao: "A" } });
+      return await CD.find({ where: { situacao: "A" }, relations: ["cidade", "cdItems"] });
       }
 
 

@@ -31,13 +31,4 @@ export class Pessoas extends BaseEntity {
   @JoinColumn({ name: "cidade_id_cidade" })
   public cidade: Cidade;
   
-  toJSON() {
-    return {
-      idPessoa: this.idPessoa,
-      nome: this.nome,
-      endereco: this.endereco,
-      cidade_id_cidade: this.cidade_id_cidade,
-      cidade: this.cidade ? this.cidade.toJSON() : null, // Chama toJSON de Cidade
-    };
-  }
 }

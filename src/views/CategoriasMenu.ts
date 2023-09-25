@@ -50,6 +50,7 @@ export class CategoriasMenu {
 
   private async list(): Promise<void> {
     let categorias = await this.controller.list();
+    console.log(categorias)
     console.table(categorias);
   }
 

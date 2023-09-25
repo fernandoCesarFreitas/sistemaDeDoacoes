@@ -51,6 +51,7 @@ export class MenuItem {
 
   private async list(): Promise<void> {
     let item: Item[] = await this.controller.list();
+    console.log(item)
     console.table(item);
   }
 

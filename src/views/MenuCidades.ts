@@ -45,6 +45,7 @@ export class MenuCidade {
 
   private async list(): Promise<void> {
     let cidade: Cidade[] = await this.controller.list();
+    console.log(cidade)
     console.table(cidade);
   }
 

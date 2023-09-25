@@ -10,12 +10,4 @@ export class Categoria extends BaseEntity {
 
   @OneToMany(() => Item, (item) => item.categoria)
   itens: Item[];
-
-   toJSON(): Record<string, any> {
-    return {
-      id_categoria: this.id_categoria,
-      descricao: this.descricao,
-      itens: this.itens ? this.itens.map((item) => item.toJSON()) : [],
-    };
-  }
 }

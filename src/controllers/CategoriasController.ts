@@ -3,7 +3,7 @@ import { Categoria } from "../models/Categorias";
 export class CategoriasController {
 
   async list() {
-    return await Categoria.find();
+    return await Categoria.find({relations: ['itens']});
   }
 
   async create (descricao: string) {

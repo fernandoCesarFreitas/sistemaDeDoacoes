@@ -45,6 +45,7 @@ export class MenuVoluntarios {
   }
   private async list(): Promise<void> {
     let voluntarios: Voluntario[] = await this.controller.listActive();
+    console.log(voluntarios)
     console.table(voluntarios);
   }
 

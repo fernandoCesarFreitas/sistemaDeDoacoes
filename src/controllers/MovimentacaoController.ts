@@ -4,16 +4,77 @@ import { CD } from "../models/Cds";
 import { Item } from "../models/Item";
 import PromptSync from "prompt-sync";
 let cdItem = new CdItem();
-
-
+let movimentacao = new Movimentacao();
 const prompt = PromptSync();
+
 export class MovimentacaoContrller {
   async list() {
     return await Movimentacao.find({
       relations: ["cdItem", "pessoas"],
     });
   }
+
   async create(
+    tipo: string,
+    quantidade: number,
+    doador: string | null,
+    beneficiarioId: number | null,
+    idCd: CD,
+    idItem: Item
+  ): Promise<Movimentacao> {
+    // fizemos desta forma para garantir que sera criado uma nova instancia toda vez que for criado uma nova movimentação
+    let cdItem = new CdItem();
+    let movimentacao = new Movimentacao();
+    
+    //uso para calcular a quantidade total de itens
+    let cdItems = await CdItem.find({ where: { cd: { id_CD: idCd.id_CD } } });
+    let quantidadeTotal = cdItems.reduce(
+      (total, cdItem) => total + cdItem.quantidade,
+      0
+    );
+    cdItem.cd = idCd;
+    cdItem.item = idItem;
+    cdItem.quantidade = 0;
+    movimentacao.tipo = tipo;
+    movimentacao.cdItem = cdItem;
+    //se tido for D entao atribuimos quantidade +
+    if (tipo == "D") {
+      quantidadeTotal += quantidade;
+      cdItem.quantidade = quantidade;
+      movimentacao.quantidade = quantidade;
+    }
+    //se tido for R entao atribuimos quantidade -
+    if (tipo == "R") {
+      quantidadeTotal -= quantidade;
+      if(quantidadeTotal<0){
+        throw new Error('Quantidade indicada para doação maior que a quantidade disponivel');
+      }else{
+        cdItem.quantidade = quantidade * -1;
+        movimentacao.quantidade = quantidade * -1;
+      }
+    }
+    // se doador vier com algum valor atribuido 
+    if (doador != null) {
+      movimentacao.doador = doador;
+    }
+    // se beneficiario vier com algum valor atribuido 
+    if (beneficiarioId != null) {
+      movimentacao.pessoas_id_pessoas = beneficiarioId;
+    }
+
+    await cdItem.save();
+
+    await movimentacao.save();
+
+    return movimentacao;
+  }
+
+  async find(id_movimentacao: number) {
+    return await Movimentacao.findOneBy({ id_movimentacao });
+  }
+
+  async edit(
+    movimentacao: Movimentacao,
     tipo: string,
     quantidade: number,
     doador: string | null,
@@ -26,149 +87,35 @@ export class MovimentacaoContrller {
       (total, cdItem) => total + cdItem.quantidade,
       0
     );
-    
-    if (!cdItem) {
-      cdItem = new CdItem();
-      cdItem.cd = idCd;
-      cdItem.item = idItem;
-      cdItem.quantidade = 0;
-      await cdItem.save();
-      let movimentacao = new Movimentacao();
-      movimentacao.tipo = tipo;
-      movimentacao.quantidade = quantidade;
-      // movimentacao.pessoas_id_pessoas = beneficiarioId;
-      movimentacao.cdItem = cdItem;
-      await movimentacao.save();
-    }
 
-    // console.log(cdItems);
-    console.log(quantidadeTotal + "quantidade total");
     cdItem.cd = idCd;
     cdItem.item = idItem;
     if (tipo == "D") {
-      cdItem.cd = idCd;
-      cdItem.item = idItem;
-      cdItem.quantidade = 0;
-      await cdItem.save();
       quantidadeTotal += quantidade;
-      console.log('quantidade dentro D'+quantidadeTotal)
-      cdItem.quantidade = quantidadeTotal;
-      await cdItem.save();
-      let movimentacao = new Movimentacao();
-      movimentacao.tipo = tipo;
+      cdItem.quantidade = quantidade;
       movimentacao.quantidade = quantidade;
-      movimentacao.cdItem = cdItem;
-      await movimentacao.save();
-    
     }
-
 
     if (tipo == "R") {
-      cdItem.cd = idCd;
-      cdItem.item = idItem;
       quantidadeTotal -= quantidade;
-      console.log('quantidade total dentro R'+quantidadeTotal)
-      cdItem.quantidade = 0;
-      // console.log(
-      //    quantidade + "quantidade total dentro do R"
-      // );
-      await cdItem.save();
-      console.log(cdItem.quantidade+ 'antes de salvar no bd')
-      cdItem.quantidade = quantidadeTotal;
-      await cdItem.save();
-      await console.log(
-        cdItem.quantidade + "quantidade que esta sendo salva no db cd_item.quantidade no R"
-        
-      );
-      let movimentacao = new Movimentacao();
-      movimentacao.tipo = tipo;
-      movimentacao.quantidade = quantidade * -1;
-      movimentacao.cdItem = cdItem;
-      await movimentacao.save();
+      if(quantidadeTotal<0){
+        throw new Error('Quantidade indicada para doação maior que a quantidade disponivel');
+      }else{
+        cdItem.quantidade = quantidade * -1;
+        movimentacao.quantidade = quantidade * -1;
+      }
     }
 
-   
-
-    if (doador !== null) {
-      movimentacao.doador = doador;
-    }
-
-    if (beneficiarioId !== null) {
-      movimentacao.pessoas_id_pessoas = beneficiarioId;
-    }
-
-    // Salvar os objetos
-    // await cdItem.save();
-
-    // Encontre o CD_Item associado ao CD e ao Item
-    if (!cdItem.cd) {
-      throw new Error("CD_Item associado não encontrado");
-    }
-
-    // // Atualizar o total das quantidades no CD_Item
-    // if (tipo === "D") {
-    //   // Se for uma doação, adicione a quantidade ao CD_Item
-    //   cdItem.quantidade += quantidade;
-    // } else if (tipo === "R") {
-    //   // Se for uma recepção, subtraia a quantidade do CD_Item
-    //   cdItem.quantidade -= quantidade;
-    //   // Certifique-se de que a quantidade não fique negativa
-    // if (cdItem.quantidade < 0) {
-    //   throw new Error("Quantidade no CD_Item não pode ser negativa");
-    // }
-    // }
-
-    // Salvar as alterações no CD_Item
-    
-
-    return movimentacao;
-  }
-
-  // async create(
-  //   tipo: string,
-  //   quantidade: number,
-  //   doador: string,
-  //   cd: CD,
-  //   item: Item
-  // ): Promise<Movimentacao> {
-  //   const cdItem = new CdItem();
-  //   cdItem.cd = cd;
-  //   cdItem.item = item;
-  //   cdItem.quantidade = quantidade;
-
-  //   const movimentacao = new Movimentacao();
-  //   movimentacao.tipo = tipo;
-  //   movimentacao.quantidade = quantidade;
-  //   movimentacao.doador = doador;
-  //   movimentacao.cdItem = cdItem;
-
-  //   try {
-  //     await cdItem.save();
-  //     await movimentacao.save();
-
-  //     return movimentacao;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
-  async find(id_movimentacao: number) {
-    return await Movimentacao.findOneBy({ id_movimentacao });
-  }
-
-  async edit(
-    movimentacao: Movimentacao,
-    data_Hora: string,
-    tipo: string,
-    quantidade: number,
-    doador: string
-  ) {
-    movimentacao.data_Hora = data_Hora;
     movimentacao.tipo = tipo;
     movimentacao.quantidade = quantidade;
-    movimentacao.doador = doador;
+    if (doador != null) {
+      movimentacao.doador = doador;
+    }
+    if (beneficiarioId != null) {
+      movimentacao.pessoas_id_pessoas = beneficiarioId;
+    }
     await movimentacao.save();
-
+    await cdItem.save();
     return movimentacao;
   }
 

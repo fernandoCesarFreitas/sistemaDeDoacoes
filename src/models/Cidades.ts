@@ -26,13 +26,4 @@ export class Cidade extends BaseEntity {
   @OneToMany(() => Pessoas, (pessoa) => pessoa.cidade)
   public pessoas: Promise<Pessoas[]>;
   
-  toJSON() {
-    return {
-      id_cidade: this.id_cidade,
-      nome: this.nome,
-      situacao: this.situacao,
-      cds: this.cds,
-      pessoas: this.pessoas,
-    };
-  }
 }

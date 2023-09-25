@@ -16,14 +16,14 @@ export class MovimentacoesMenu {
   public pController: PessoasController;
   public cdController: CdController;
   public itemController: ItemController;
-  public movimentacao :Movimentacao;
+  public movimentacao: Movimentacao;
 
   constructor() {
     this.controller = new MovimentacaoContrller();
     this.pController = new PessoasController();
     this.cdController = new CdController();
     this.itemController = new ItemController();
-    this.movimentacao =  new Movimentacao();
+    this.movimentacao = new Movimentacao();
   }
 
   public show() {
@@ -77,33 +77,31 @@ export class MovimentacoesMenu {
 
   private async list(): Promise<void> {
     let movimentacoes = await this.controller.list();
-    const movimentacaoJSON = JSON.stringify(this.movimentacao.toJSON(), null, 2);
     console.log(movimentacoes);
     console.table(movimentacoes);
-    console.log(movimentacaoJSON);
   }
 
   private async create(): Promise<void> {
     let anonimo: string = "Anônimo";
     let beneficiario: number | null = null;
-    let doador: string | null= null;
+    let doador: string | null = null;
 
     let tipo: string = prompt(
       "Tipo de movimentação:\n[D] - Efetuar doação\n[R] - Receber doação:\n"
     ).toUpperCase();
 
-    if (tipo === "R") {
+    if (tipo == "R") {
       let pessoas: Pessoas[] = await this.pController.list();
       console.table(pessoas);
 
-      while (beneficiario === null) {
+      while (beneficiario == null) {
         let beneficiarioId: number = Number(
           prompt(
             "Informe o ID da pessoa que irá receber a doação (ou 0 para cancelar):"
           )
         );
 
-        if (beneficiarioId === 0) {
+        if (beneficiarioId == 0) {
           console.log("Operação de criação de movimentação cancelada.");
           return;
         }
@@ -113,7 +111,6 @@ export class MovimentacoesMenu {
         );
         if (pessoa) {
           beneficiario = pessoa.idPessoa;
-          
         } else {
           console.log(
             "ID de beneficiário não encontrado. Tente novamente ou pressione 0 para cancelar."
@@ -136,7 +133,7 @@ export class MovimentacoesMenu {
       )
     );
 
-    if (cdId === 0) {
+    if (cdId == 0) {
       console.log("Operação de criação de movimentação cancelada.");
       return;
     }
@@ -171,7 +168,7 @@ export class MovimentacoesMenu {
         doador,
         beneficiario,
         cd,
-        item,
+        item
       );
 
       console.log(`Movimentação ID #${m.id_movimentacao} criada com sucesso!`);
@@ -180,22 +177,102 @@ export class MovimentacoesMenu {
     }
   }
 
+
+
+
+
+
   private async edit(): Promise<void> {
-    let id: number = Number(prompt("Qual o ID?"));
+    let anonimo: string = "Anônimo";
+    let beneficiario: number | null = null;
+    let doador: string | null = null;
+
+    let id: number = Number(prompt("Informe o ID da movimentação:"));
     let movimentacao: Movimentacao | null = await this.controller.find(id);
 
     if (movimentacao) {
-      let data_hora = prompt(`Data e Hora ${movimentacao.data_Hora}`);
-      let tipo = prompt(`Tipo ${movimentacao.tipo}`, movimentacao.tipo);
-      let quantidade = Number(prompt(`Quantidade ${movimentacao.quantidade}`));
-      let doador = prompt(`Quantidade ${movimentacao.quantidade}`);
+      let tipo = prompt(
+        `Tipo de movimentação:\n[D] - Efetuar doação\n[R] - Receber doação:\n" ${movimentacao.tipo}`,
+        movimentacao.tipo
+      ).toLocaleUpperCase();
+      let quantidade = Number(
+        prompt(
+          `Quantidade ${movimentacao.quantidade}`,
+          String(movimentacao.quantidade)
+        )
+      );
+      if (tipo == "R") {
+        let beneficiarioId: number = Number(
+          prompt(
+            `Informe o nome do doador (ou pressione Enter para ${movimentacao.pessoas_id_pessoas}): `, String(movimentacao.pessoas_id_pessoas)
+          )
+        );
 
-      movimentacao = await this.controller.edit(
+        if (beneficiarioId == 0) {
+          console.log("Operação de criação de movimentação cancelada.");
+          return;
+        }
+
+        let pessoa: Pessoas | null = await this.pController.find(
+          beneficiarioId
+        );
+        if (pessoa) {
+          beneficiario = pessoa.idPessoa;
+        } else {
+          console.log(
+            "ID de beneficiário não encontrado. Tente novamente ou pressione 0 para cancelar."
+          );
+        }
+      } else {
+        doador = prompt(
+          `Informe o nome do doador (ou pressione Enter para ${movimentacao.doador}): `,
+          movimentacao.doador
+        );
+      }
+
+      let cds: CD[] = await this.cdController.list();
+      console.table(cds);
+
+      let cdId: number = Number(
+        prompt(
+          `Informe o ID do CD que será destinado à doação (ou 0 para cancelar): `
+        )
+      );
+  
+      if (cdId == 0) {
+        console.log("Operação de criação de movimentação cancelada.");
+        return;
+      }
+  
+      let cd: CD | null = await this.cdController.find(cdId);
+      if (!cd) {
+        console.log(
+          "ID de CD não encontrado. Encerrando a criação de movimentação."
+        );
+        return;
+      }
+  
+      let itens: Item[] = await this.itemController.list();
+      console.table(itens);
+  
+      let idItem: number = Number(prompt("Informe o ID do item: "));
+  
+      let item: Item | null = await this.itemController.find(idItem);
+      if (!item) {
+        console.log(
+          "ID de item não encontrado. Encerrando a criação de movimentação."
+        );
+        return;
+      }
+  
+     movimentacao = await this.controller.edit(
         movimentacao,
-        data_hora,
         tipo,
         quantidade,
-        doador
+        doador,
+        beneficiario,
+        cd,
+        item,
       );
       console.log(
         `Movimentação ID #${movimentacao.id_movimentacao} atualizado com sucesso!`
@@ -206,15 +283,16 @@ export class MovimentacoesMenu {
     console.log("Movimentação atualizada com sucesso!");
   }
 
+  
   private async delete(): Promise<void> {
-    let id: number = Number(prompt("Qual o ID?"));
+    let id: number = Number(prompt("Informe o ID da movimentação:"));
     let movimentacao: Movimentacao | null = await this.controller.find(id);
 
     if (movimentacao) {
       await this.controller.delete(movimentacao);
-      console.log(`Movimentação ID#${id} excluído com sucesso!`);
+      console.log(`Movimentação ID#${id} excluída com sucesso!`);
     } else {
-      console.log("Movimentação não encontrado");
+      console.log("Movimentação não encontrada");
     }
   }
 }

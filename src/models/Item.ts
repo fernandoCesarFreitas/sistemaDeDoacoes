@@ -1,6 +1,5 @@
-
 import { Categoria } from './Categorias';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn,OneToMany,ManyToMany} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn,OneToMany,} from 'typeorm';
 import { CdItem } from './Cd_item';
 
 @Entity('itens')
@@ -27,19 +26,6 @@ export class Item extends BaseEntity {
   @JoinColumn({ name: 'categoria_id_categoria' })
   public categoria: Categoria;
 
-  toJSON(): Record<string, any> {
-    return {
-      id_item: this.id_item,
-      nome: this.nome,
-      situacao: this.situacao,
-      categoria_id_categoria: this.categoria_id_categoria,
-      categoria: this.categoria ? this.categoria.toJSON() : null,
-    };
-  }
-
-  // @ManyToMany(() => CdItem, (cditen)=> cditen.item) // Define a relação com a entidade Item
-  // @JoinColumn({ name: 'item_id_item' })
-  // item: CdItem;
 }
 
 //nullable: true 
