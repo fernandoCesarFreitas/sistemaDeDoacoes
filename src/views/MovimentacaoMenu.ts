@@ -177,11 +177,6 @@ export class MovimentacoesMenu {
     }
   }
 
-
-
-
-
-
   private async edit(): Promise<void> {
     let anonimo: string = "Anônimo";
     let beneficiario: number | null = null;
@@ -204,7 +199,8 @@ export class MovimentacoesMenu {
       if (tipo == "R") {
         let beneficiarioId: number = Number(
           prompt(
-            `Informe o nome do doador (ou pressione Enter para ${movimentacao.pessoas_id_pessoas}): `, String(movimentacao.pessoas_id_pessoas)
+            `Informe o nome do doador (ou pressione Enter para ${movimentacao.pessoas_id_pessoas}): `,
+            String(movimentacao.pessoas_id_pessoas)
           )
         );
 
@@ -238,12 +234,12 @@ export class MovimentacoesMenu {
           `Informe o ID do CD que será destinado à doação (ou 0 para cancelar): `
         )
       );
-  
+
       if (cdId == 0) {
         console.log("Operação de criação de movimentação cancelada.");
         return;
       }
-  
+
       let cd: CD | null = await this.cdController.find(cdId);
       if (!cd) {
         console.log(
@@ -251,12 +247,12 @@ export class MovimentacoesMenu {
         );
         return;
       }
-  
+
       let itens: Item[] = await this.itemController.list();
       console.table(itens);
-  
+
       let idItem: number = Number(prompt("Informe o ID do item: "));
-  
+
       let item: Item | null = await this.itemController.find(idItem);
       if (!item) {
         console.log(
@@ -264,15 +260,15 @@ export class MovimentacoesMenu {
         );
         return;
       }
-  
-     movimentacao = await this.controller.edit(
+
+      movimentacao = await this.controller.edit(
         movimentacao,
         tipo,
         quantidade,
         doador,
         beneficiario,
         cd,
-        item,
+        item
       );
       console.log(
         `Movimentação ID #${movimentacao.id_movimentacao} atualizado com sucesso!`
@@ -283,15 +279,16 @@ export class MovimentacoesMenu {
     console.log("Movimentação atualizada com sucesso!");
   }
 
-  
   private async delete(): Promise<void> {
     await this.list();
     let id: number = Number(prompt("Informe o ID da movimentação:"));
     let movimentacao: Movimentacao | null = await this.controller.find(id);
 
     if (movimentacao) {
-      let confirmacao:string =prompt('Deseja realmente excluir essa movimentação?[s/n]').toUpperCase();
-      if(confirmacao == 'S'){
+      let confirmacao: string = prompt(
+        "Deseja realmente excluir essa movimentação?[s/n]"
+      ).toUpperCase();
+      if (confirmacao == "S") {
         await this.controller.delete(movimentacao);
       }
       console.log(`Movimentação ID#${id} excluída com sucesso!`);
