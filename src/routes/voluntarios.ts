@@ -6,7 +6,7 @@ let rotas:Router = Router();
 //listar
 rotas.get("/voluntarios", voluntarioController.list);
 //visualizar 1 usuario pelo id
-rotas.get("/voluntarios/:id",voluntarioController.find);
+// rotas.get("/voluntarios/:id",voluntarioController.find);
 //criar
 rotas.post("/voluntarios",voluntarioController.create);
 //atualizar

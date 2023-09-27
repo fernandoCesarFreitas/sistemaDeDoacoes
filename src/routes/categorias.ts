@@ -10,7 +10,7 @@ rotas.get("/categorias/:id",categoriaController.find);
 //criar
 rotas.post("/categorias",categoriaController.create);
 //atualizar
-rotas.put("/categorias/:id",categoriaController.edit);
+// rotas.put("/categorias/:id",categoriaController.edit);
 //delete
 rotas.delete("/categorias/:id",categoriaController.delete);
 
