@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2022",
     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "commonjs",
+    "module": "node16",
     /* Specify what module code is generated. */
     "moduleResolution": "node16",
     /* Specify how TypeScript looks up a file from a given module specifier. */
