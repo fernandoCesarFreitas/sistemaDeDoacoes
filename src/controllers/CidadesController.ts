@@ -1,9 +1,13 @@
 import { Cidade } from "../models/Cidades";
-
+import { Request, Response } from "express";
 export class CidadesController {
-    async list(): Promise<Cidade[]> {
-      return await Cidade.find({ where: { situacao: "A" } });
-      }
+    // async list(): Promise<Cidade[]> {
+    //   return await Cidade.find({ where: { situacao: "A" } });
+    //   }
+    async list(req: Request, res: Response): Promise<Response> {
+      let cidade: Cidade[] = await Cidade.find({ where: { situacao: "A" } });
+      return res.status(200).json({ cidade });
+    }
 
       async create(
         nome: string,
