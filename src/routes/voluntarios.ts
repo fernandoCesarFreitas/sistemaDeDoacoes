@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { VoluntarioController } from "../controllers/VoluntariosController";
-let voluntarioController: VoluntarioController = new UsuarioController();
+let voluntarioController: VoluntarioController = new VoluntarioController();
 
 let rotas:Router = Router();
 //listar
