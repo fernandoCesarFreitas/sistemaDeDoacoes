@@ -1,0 +1,51 @@
+body {
+    background-color: #e6f7ff; /* Azul claro como cor de fundo */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.pai {
+    width: 300px;
+    padding: 30px;
+    border: 2px solid #ccc;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.pai div {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 5px;
+}
+
+button {
+    background-color: #ff8c66; /* Laranja como destaque */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    margin: 0 auto; /* Centralizar o botão horizontalmente */
+    display: block; /* Para ocupar toda a largura disponível */
+}

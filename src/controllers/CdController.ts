@@ -1,41 +1,61 @@
-import { CD } from './../models/Cds';
+import { CD } from "./../models/Cds";
+import { Request, Response } from "express";
 let cd: CD = new CD();
 
 export class CdController {
-  async list(): Promise<CD[]> {
-      return await CD.find({ where: { situacao: "A" }, relations: ["cidade", "cdItems"] });
-      }
+  async list(req: Request, res: Response): Promise<Response> {
+    let cd: CD[] = await CD.find();
+    return res.status(200).json({ cd });
+  }
 
-      async create(
-        nome: string,
-        situacao: string,
-        cidadeId: number,
-      ):Promise <CD> {
-        cd.nome = nome;
-        cd.situacao =  situacao;
-        cd.cidade_id_cidade = cidadeId;
+  async create(req: Request, res: Response): Promise<Response> {
+    let body = req.body; //pega o que vem da tela
 
-        await cd.save();
-        return cd;
-      }
+    let cd: CD = await CD.create({
+      nome: body.nome,
+      situacao: "A",
+    }).save(); //cria o usuario
 
-      async edit(
-        cd: CD,
-        descricao: string,
-        situacao: string,
-      ): Promise<CD> {
-        cd.nome = descricao;
-        cd.situacao = situacao;
-        await cd.save();
-        return cd;
-      }
-      
-      async delete(cd:CD) {
-        cd.situacao = 'I';
-        await cd.save();
-      }
-      async find (id: number): Promise<CD|null> {
-        return await CD.findOneBy({ id_CD:id });
-      }
-    
+    return res.status(200).json(cd); //retorna o usuario criado e o status que deu certo
+  }
+
+  async edit(req: Request, res: Response): Promise<Response> {
+    let body = req.body;
+    let id = Number(req.params.id);
+
+    let cd: CD | null = await CD.findOneBy({ id_CD: id });
+
+    if (!cd) {
+      return res.status(422).json({ error: "Cd não encontrado" });
+    }
+    cd.nome = body.nome;
+    cd.situacao = body.situacao;
+    await cd.save();
+    return res.status(200).json(cd);
+  }
+
+  async delete(req: Request, res: Response): Promise<Response> {
+    let body = req.body;
+    let id = Number(req.params.id);
+
+    let cd: CD | null = await CD.findOneBy({ id_CD:id });
+
+    if (!cd) {
+      return res.status(422).json({ error: "CD não encontrado" });
+    }
+    cd.remove();
+    return res.status(200).json();
+  }
+  async find(req: Request, res: Response): Promise<Response> {
+    let body = req.body;
+    let id = Number(req.params.id);
+
+    let cd: CD | null = await CD.findOneBy({ id_CD:id });
+
+    if (!cd) {
+      return res.status(422).json({ error: "cd não encontrado" });
+    }
+
+    return res.status(200).json(cd);
+  }
 }

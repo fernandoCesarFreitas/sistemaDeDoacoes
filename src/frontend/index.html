@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="pai">
+        <div class="titulo">Cadastro de Usuários</div>
+        <form id="userForm">
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome">
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" id="email">
+            </div>
+            <div>
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha">
+            </div>
+
+            <button type="button" onclick="api()">Salvar</button>
+        </form>
+    </div>
+    <script>
+        async function api() {
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
+
+            const data = {
+                nome: nome,
+                email: email,
+                senha: senha,
+            };
+
+            const response = await fetch('http://localhost:3000/usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Usuário salvo com sucesso!')
+                const responseData = await response.json();
+                document.getElementById("nome").value = "";
+                document.getElementById("senha").value = "";
+                document.getElementById("confirmarSenha").value = "";
+                console.log(responseData);
+            } else {
+                alert('Erro ao salvar o usuário.')
+                console.error();
+            }
+        }
+    </script>
+</body>
+
+</html>
