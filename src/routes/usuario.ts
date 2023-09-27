@@ -4,14 +4,14 @@ let voluntarioController: VoluntarioController = new UsuarioController();
 
 let rotas:Router = Router();
 //listar
-rotas.get("/usuarios", voluntarioController.list);
+rotas.get("/voluntarios", voluntarioController.list);
 //visualizar 1 usuario pelo id
-rotas.get("/usuarios/:id",voluntarioController.find);
+rotas.get("/voluntarios/:id",voluntarioController.find);
 //criar
-rotas.post("/usuarios",voluntarioController.create);
+rotas.post("/voluntarios",voluntarioController.create);
 //atualizar
-rotas.put("/usuarios/:id",voluntarioController.edit);
+rotas.put("/voluntarios/:id",voluntarioController.edit);
 //delete
-rotas.delete("/usuarios/:id",voluntarioController.delete);
+rotas.delete("/voluntarios/:id",voluntarioController.delete);
 
 export default rotas;
