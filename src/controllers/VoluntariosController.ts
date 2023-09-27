@@ -15,7 +15,7 @@ export class VoluntarioController {
   }
 
   async listActive(req: Request, res: Response): Promise<Response> {
-    let voluntarios: Voluntario[] = await Voluntario.find({ where: { situacao: "A" });
+    let voluntarios: Voluntario[] = await Voluntario.find({ where: { situacao: "A" }});
 
     return res.status(200).json(voluntarios);
   }
@@ -37,7 +37,7 @@ export class VoluntarioController {
     let body = req.body;
     let id = Number(req.params.id);
 
-    let voluntario: Voluntario | null = await Voluntario.findOneBy({ id });
+    let voluntario: Voluntario | null = await Voluntario.findOneBy({ idvoluntario: id });
     if (!voluntario) {
       return res.status(422).json({ error: "Usuário não foi encontrado!" });
     }
@@ -53,7 +53,7 @@ export class VoluntarioController {
   async delete(req: Request, res: Response): Promise<Response> {
     let id = Number(req.params.id);
 
-    let voluntario: Voluntario | null = await Voluntario.findOneBy({ id });
+    let voluntario: Voluntario | null = await Voluntario.findOneBy({ idvoluntario: id });
     if (!voluntario) {
       return res.status(422).json({ error: "Usuário não foi encontrado!" });
     }
@@ -64,6 +64,7 @@ export class VoluntarioController {
   }
 
   async checker(req: Request, res: Response): Promise<Response> {
+    let nome;
     let voluntario: Voluntario | null = await Voluntario.findOneBy({ nome: nome });
 
     if (!voluntario) {
@@ -73,11 +74,11 @@ export class VoluntarioController {
     return res.status(200).json({ text: `Usuário encontrado!` });
   }
 
-  setusuarioLogado(req: Request, res: Response) {
+  async setusuarioLogado(req: Request, res: Response) {
     let body = req.body;
     let id = Number(req.params.id);
 
-    let voluntario: Voluntario | null = await Voluntario.findOneBy({ id });
+    let voluntario: Voluntario | null = await Voluntario.findOneBy({ idvoluntario: id });
     if (voluntario?.situacao != 'A' ) {
       res.status(422).json({ error: "Usuário não esta logado!" });
     } else {
