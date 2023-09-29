@@ -27,7 +27,7 @@ export class VoluntarioController {
       nome: body.nome,
       senha: body.senha,
       email: body.email,
-      situacao: body.situacao,
+      situacao: 'A',
     }).save();
 
     return res.status(200).json(voluntario);
@@ -42,7 +42,7 @@ export class VoluntarioController {
       return res.status(422).json({ error: "Usuário não foi encontrado!" });
     }
 
-    (voluntario.nome = body.nome),
+      (voluntario.nome = body.nome),
       (voluntario.email = body.email),
       (voluntario.senha = body.senha),
       await voluntario.save();

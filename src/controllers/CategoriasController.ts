@@ -1,11 +1,15 @@
 import { Categoria } from "../models/Categorias";
 import { Request, Response } from "express";
+import { ILike } from "typeorm";
 
 export class CategoriasController {
   async list(req: Request, res: Response): Promise<Response> {
-    let categorias: Categoria[] = await Categoria.find();
-    console.log(categorias);
-    return res.status(200).json({ categorias });
+    let descricao = req.query.nome;
+
+    let categorias: Categoria[] = await Categoria.findBy({
+      descricao: descricao ? ILike(`%${descricao}%`):undefined 
+    });
+    return res.status(200).json( categorias );
   }
 
   async create(req: Request, res: Response): Promise<Response> {
@@ -19,14 +23,14 @@ export class CategoriasController {
 
   async edit(req: Request, res: Response): Promise<Response> {
     let body = req.body;
-
+    let categoria : Categoria = res.locals.categoria;
     let id: number = Number(req.params.id);
-    console.log(id)
-    let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
+    // console.log(id)
+    // let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
 
-    if (!categoria) {
-      return res.status(422).json({ error: "Categoria não encontrada!" });
-    }
+    // if (!categoria) {
+    //   return res.status(422).json({ error: "Categoria não encontrada!" });
+    // }
     categoria.descricao = body.descricao;
     await categoria.save();
 

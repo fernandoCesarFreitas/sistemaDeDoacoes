@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express,Request,Response, NextFunction } from "express";
 import cors from "cors";
 import voluntariosRoutes from './routes/voluntarios';
 import pessoasRoutes from './routes/pessoas';
@@ -12,6 +12,11 @@ let port: Number = Number(process.env.server_port || 3000);
 
 server.use(cors());
 server.use(express.json());
+
+server.use((req:Request, res:Response, next: NextFunction)=>{
+  console.log('['+(new Date)+ ']'+req.method +' '+req.url);
+  next();
+});
 
 // chama a rota de usuarios
 server.use(voluntariosRoutes);
