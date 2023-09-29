@@ -1,42 +1,50 @@
 import { Cidade } from "../models/Cidades";
 import { Request, Response } from "express";
+import { ILike } from "typeorm";
 export class CidadesController {
     // async list(): Promise<Cidade[]> {
     //   return await Cidade.find({ where: { situacao: "A" } });
     //   }
     async list(req: Request, res: Response): Promise<Response> {
-      let cidade: Cidade[] = await Cidade.find({ where: { situacao: "A" } });
-      return res.status(200).json({ cidade });
+      let nome = req.query.nome;
+  
+      let cidades: Cidade[] = await Cidade.findBy({
+        nome: nome ? ILike(`%${nome}%`):undefined
+      }); //aqui na lista nao usamos as {}
+      return res.status(200).json(cidades);
     }
 
-      async create(
-        nome: string,
-        situacao: string,
-      ): Promise<Cidade> {
-        let cidade: Cidade = await Cidade.create({
-          nome,
-          situacao,
-        }).save();
-        return cidade;
-      }
+    async create(req: Request, res: Response): Promise<Response> {
+      let body = req.body; //pega o que vem da tela
+  
+      let cidade: Cidade = await Cidade.create({
+        nome: body.nome,
+        situacao: body.situacao,
+      }).save(); //cria o usuario
+  
+      return res.status(200).json(cidade); //retorna o usuario criado e o status que deu certo
+    }
 
-      async edit(
-        cidade: Cidade,
-        descricao: string,
-        situacao: string,
-      ): Promise<Cidade> {
-        cidade.nome = descricao;
-        cidade.situacao = situacao;
-        await cidade.save();
-        return cidade;
-      }
+    async edit(req: Request, res: Response): Promise<Response> {
+      let body = req.body;
+      let cidade: Cidade = res.locals.cidade;
+      cidade.nome = body.nome;
+      cidade.situacao = body.situacao;
+      await cidade.save();
+  
+      return res.status(200).json(cidade);
+    }
       
-      async delete(cidade:Cidade) {
+      async delete(req: Request, res: Response): Promise<Response> {
+        let body = req.body;
+        let cidade: Cidade = res.locals.cidade;
         cidade.situacao = 'I';
         await cidade.save();
+        return res.status(200).json(cidade);
       }
-      async find (id: number): Promise<Cidade|null> {
-        return await Cidade.findOneBy({ id_cidade:id });
+
+      async find(req: Request, res: Response): Promise<Response> {
+        let cidade: Cidade = res.locals.cidade;
+        return res.status(200).json(cidade);
       }
-    
 }

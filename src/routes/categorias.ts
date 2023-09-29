@@ -41,7 +41,7 @@ async function validarPayload(
     if (!categoria) {
       return res.status(422).json({ error: "usuario nao encontrado" });
     }
-    res.locals.usuario = categoria;
+    res.locals.categoria = categoria;
   
     return next();
   }

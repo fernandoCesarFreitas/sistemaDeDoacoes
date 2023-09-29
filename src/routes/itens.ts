@@ -1,17 +1,61 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { ItemController } from "../controllers/ItemController";
+import { Item } from "../models/Item";
+import * as yup from "yup";
 let itemController: ItemController = new ItemController();
 
-let rotas:Router = Router();
+async function validarPayload(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> {
+  let schema = yup.object({
+    nome: yup.string().max(3).max(255).required(),
+    email: yup.string().email().required(),
+    senha: yup.string().min(6).max(16).required(),
+  });
+  let payload = req.body;
+  try {
+    req.body = await schema.validate(payload, {
+      abortEarly: false,
+      stripUnknown: true,
+    });
+    return next();
+  } catch (error) {
+    if (error instanceof yup.ValidationError) {
+      return res.status(400).json({ erros: error.errors });
+    }
+    return res.status(500).json({ error: "ops" });
+  }
+}
+
+async function validar(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> {
+  let id = Number(req.params.id);
+
+  let item: Item | null = await Item.findOneBy({ id_item: id });
+
+  if (!item) {
+    return res.status(422).json({ error: "usuario nao encontrado" });
+  }
+  res.locals.item = item;
+
+  return next();
+}
+
+let rotas: Router = Router();
 //listar
 rotas.get("/itens", itemController.list);
 //visualizar 1 usuario pelo id
-rotas.get("/itens/:id",itemController.find);
+rotas.get("/itens/:id", validar,itemController.find);
 //criar
-// rotas.post("/itens",itemController.create);
+rotas.post("/itens",validarPayload, itemController.create);
 //atualizar
-// rotas.put("/itens/:id",itemController.edit);
+rotas.put("/itens/:id",validar,validarPayload, itemController.update);
 //delete
-rotas.delete("/itens/:id",itemController.delete);
+rotas.delete("/itens/:id",validar, itemController.delete);
 
 export default rotas;
