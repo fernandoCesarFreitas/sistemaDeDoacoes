@@ -11,8 +11,7 @@ async function validarPayload(
     next: NextFunction
   ): Promise<Response | void> {
     let schema = yup.object({
-      nome: yup.string().max(3).max(255).required(),
-      situacao: yup.string().email().required(),
+      nome: yup.string().min(3).max(255).required(),
      
     });
     let payload = req.body;

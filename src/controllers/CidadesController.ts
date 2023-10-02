@@ -19,7 +19,7 @@ export class CidadesController {
   
       let cidade: Cidade = await Cidade.create({
         nome: body.nome,
-        situacao: body.situacao,
+        situacao: 'A',
       }).save(); //cria o usuario
   
       return res.status(200).json(cidade); //retorna o usuario criado e o status que deu certo
