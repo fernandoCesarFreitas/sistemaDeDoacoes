@@ -14,7 +14,7 @@ export class CategoriasController {
 
   async create(req: Request, res: Response): Promise<Response> {
     let body = req.body;
-
+     console.log(body)
     let categoria: Categoria = await Categoria.create({
       descricao: body.descricao,
     }).save();
@@ -24,7 +24,6 @@ export class CategoriasController {
   async edit(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let categoria : Categoria = res.locals.categoria;
-    let id: number = Number(req.params.id);
     // console.log(id)
     // let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
 
@@ -37,18 +36,25 @@ export class CategoriasController {
     return res.status(200).json(categoria);
   }
 
-  async delete (req: Request, res: Response): Promise<Response>{
+
+  async delete(req: Request, res: Response): Promise<Response> {
     let body = req.body;
-    let id = Number(req.params.id);
-
-    let categoria: Categoria | null =  await Categoria.findOneBy({id_categoria:id});
-
-    if(!categoria){
-        return res.status(422).json({error:'produto não encontrado'});
-    }
+    let categoria : Categoria = res.locals.categoria;
     categoria.remove();
     return res.status(200).json();
-}
+  }
+//   async delete (req: Request, res: Response): Promise<Response>{
+//     let body = req.body;
+//     let id = Number(req.params.id);
+
+//     let categoria: Categoria | null =  await Categoria.findOneBy({id_categoria:id});
+
+//     if(!categoria){
+//         return res.status(422).json({error:'produto não encontrado'});
+//     }
+//     categoria.remove();
+//     return res.status(200).json();
+// }
 
   async find(req: Request, res: Response): Promise<Response> {
     let body = req.body;

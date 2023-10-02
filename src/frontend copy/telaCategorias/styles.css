@@ -1,0 +1,53 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h1{
+    text-align: center;
+}
+
+
+
+.pai {
+    width: 400px;
+    height: 300px;
+    padding: 20px;
+    border: 2px solid #b2b1b1;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px; /* Espaçamento maior */
+    display: flex; /* Tornar a div pai flexível */
+    flex-direction: column; /* Alinhar itens verticalmente */
+    justify-content: center; /* Alinhar itens horizontalmente */
+    text-align: left; /* Alinhar o texto à esquerda */
+}
+
+.titulo {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center; /* Centralizar o texto */
+}
+
+.tabela{
+    margin-bottom: 20px ;
+    width: 60% !important; /* Garantir que os campos ocupem toda a largura */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 5px;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center; /* Centralizar o texto do botão */
+}

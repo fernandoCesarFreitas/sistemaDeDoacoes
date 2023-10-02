@@ -10,9 +10,7 @@ async function validarPayload(
     next: NextFunction
   ): Promise<Response | void> {
     let schema = yup.object({
-      nome: yup.string().max(3).max(255).required(),
-      email: yup.string().email().required(),
-      senha: yup.string().min(6).max(16).required(),
+      descricao: yup.string().min(3).max(255).required(),
     });
     let payload = req.body;
     try {
@@ -39,7 +37,7 @@ async function validarPayload(
     let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
   
     if (!categoria) {
-      return res.status(422).json({ error: "usuario nao encontrado" });
+      return res.status(422).json({ error: "Categorias não encontrada!" });
     }
     res.locals.categoria = categoria;
   
