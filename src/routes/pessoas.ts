@@ -8,9 +8,9 @@ rotas.get("/pessoas", pessoasController.list);
 //visualizar 1 usuario pelo id
 rotas.get("/pessoas/:id",pessoasController.find);
 //criar
-// rotas.post("/pessoas",pessoasController.create);
+rotas.post("/pessoas",pessoasController.create);
 //atualizar
-// rotas.put("/pessoas/:id",pessoasController.edit);
+rotas.put("/pessoas/:id",pessoasController.edit);
 //delete
 rotas.delete("/pessoas/:id",pessoasController.delete);
 
