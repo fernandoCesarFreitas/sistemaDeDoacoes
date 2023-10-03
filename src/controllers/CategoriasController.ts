@@ -24,22 +24,22 @@ export class CategoriasController {
   async edit(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let categoria : Categoria = res.locals.categoria;
-    // console.log(id)
     // let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
-
+    
     // if (!categoria) {
-    //   return res.status(422).json({ error: "Categoria não encontrada!" });
-    // }
-    categoria.descricao = body.descricao;
-    await categoria.save();
-
-    return res.status(200).json(categoria);
-  }
-
-
-  async delete(req: Request, res: Response): Promise<Response> {
-    let body = req.body;
-    let categoria : Categoria = res.locals.categoria;
+      //   return res.status(422).json({ error: "Categoria não encontrada!" });
+      // }
+      categoria.descricao = body.descricao;
+      await categoria.save();
+      
+      return res.status(200).json(categoria);
+    }
+    
+    
+    async delete(req: Request, res: Response): Promise<Response> {
+      let body = req.body;
+      let categoria : Categoria = res.locals.categoria;
+      console.log('delete'+res.locals.categoria)
     categoria.remove();
     return res.status(200).json();
   }
@@ -59,6 +59,7 @@ export class CategoriasController {
   async find(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let id = Number(req.params.id);
+
 
     let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
 

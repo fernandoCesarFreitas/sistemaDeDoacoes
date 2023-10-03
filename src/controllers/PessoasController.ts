@@ -20,22 +20,29 @@ export class PessoasController {
      console.log(body)
     let pessoa: Pessoas = await Pessoas.create({
       nome: body.nome,
+      endereco: body.endereco,
+      cidade_id_cidade: body.cidade_id_cidade,
     }).save();
     return res.status(200).json(pessoa);
   }
 
   async edit(req: Request, res: Response): Promise<Response> {
     let body = req.body;
+    console.log(body)
     let pessoa : Pessoas = res.locals.pessoa;
+    
     // console.log(id)
     // let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
 
     // if (!categoria) {
     //   return res.status(422).json({ error: "Categoria não encontrada!" });
     // }
+     console.log(res.locals.pessoa)
     pessoa.nome = body.nome;
+    
     pessoa.endereco =  body.endereco;
-    pessoa.cidade =  body.cidade;
+    pessoa.cidade_id_cidade =  body.cidade_id_cidade;
+   
     await pessoa.save();
 
     return res.status(200).json(pessoa);
