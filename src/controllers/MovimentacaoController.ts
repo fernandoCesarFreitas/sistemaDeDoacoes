@@ -1,4 +1,5 @@
 import { Movimentacao } from "../models/Movimentacao";
+import { Request, Response } from "express";
 import { CdItem } from "../models/Cd_item";
 import { CD } from "../models/Cds";
 import { Item } from "../models/Item";
@@ -8,11 +9,20 @@ let movimentacao = new Movimentacao();
 const prompt = PromptSync();
 
 export class MovimentacaoContrller {
-  async list() {
-    return await Movimentacao.find({
-      relations: ["cdItem", "pessoas"],
-    });
+  async list(req: Request, res: Response): Promise<Response> {
+    let nome = req.query.nome;
+
+    let movimentacao: Movimentacao[] = await Movimentacao.find({
+      relations:['cdItem', 'pessoas']
+      // nome: nome ? ILike(`%${nome}%`):undefined
+    }); //aqui na lista nao usamos as {}
+    return res.status(200).json(movimentacao);
   }
+  // async list() {
+  //   return await Movimentacao.find({
+  //     relations: ["cdItem", "pessoas"],
+  //   });
+  // }
 
   async create(
     tipo: string,
