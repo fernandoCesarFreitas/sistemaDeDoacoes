@@ -67,7 +67,7 @@ export class VoluntarioController {
     let voluntario: Voluntario = res.locals.voluntario;
     voluntario.situacao = "I";
     await voluntario.save();
-    return res.status(200).json();
+    return res.status(200).json(voluntario);
   }
 
   async find(req: Request, res: Response): Promise<Response> {

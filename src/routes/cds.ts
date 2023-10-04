@@ -11,8 +11,7 @@ async function validarPayload(
   ): Promise<Response | void> {
     let schema = yup.object({
       nome: yup.string().max(3).max(255).required(),
-      tipe: yup.string().email().required(),
-      cidade_id_cidade: yup.number().min(1).max(16).required(),
+      cidade_id_cidade: yup.number().integer(),
     });
     let payload = req.body;
     try {
@@ -39,7 +38,7 @@ async function validarPayload(
     let cd: CD | null = await CD.findOneBy({ id_CD:id });
   
     if (!cd) {
-      return res.status(422).json({ error: "usuario nao encontrado" });
+      return res.status(422).json({ error: "CD nao encontrado" });
     }
     res.locals.cd = cd;
   
