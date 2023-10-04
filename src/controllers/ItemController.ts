@@ -8,10 +8,11 @@ export class ItemController {
   async list(req: Request, res: Response): Promise<Response> {
     let nome = req.query.nome;
 
-    let users: Item[] = await Item.findBy({
-      nome: nome ? ILike(`%${nome}%`):undefined
+    let itens: Item[] = await Item.find({
+      relations:['categoria']
+      // nome: nome ? ILike(`%${nome}%`):undefined
     }); //aqui na lista nao usamos as {}
-    return res.status(200).json(users);
+    return res.status(200).json(itens);
   }
 
   async create(req: Request, res: Response): Promise<Response> {
@@ -19,7 +20,8 @@ export class ItemController {
 
     let item: Item = await Item.create({
       nome: body.nome,
-      situacao: body.situacao,
+      situacao: 'A',
+      categoria_id_categoria: body.categoria_id_categoria,
     }).save(); //cria o usuario
 
     return res.status(200).json(item); //retorna o usuario criado e o status que deu certo
@@ -28,9 +30,10 @@ export class ItemController {
   async update(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let item: Item = res.locals.item;
-    item.nome = body.nome;
-    item.situacao = body.situacao;
 
+    item.nome = body.nome;
+    item.situacao = 'A';
+    item.categoria_id_categoria =  body.categoria_id_categoria;
     await item.save();
 
     return res.status(200).json(item);

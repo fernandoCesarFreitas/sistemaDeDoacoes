@@ -39,7 +39,7 @@ async function validarPayload(
     let pessoa: Pessoas | null = await Pessoas.findOneBy({ idPessoa:id });
   
     if (!pessoa) {
-      return res.status(422).json({ error: "Categorias não encontrada!" });
+      return res.status(422).json({ error: "Pessoa não encontrada!" });
     }
     res.locals.pessoa = pessoa;
   
