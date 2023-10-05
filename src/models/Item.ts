@@ -22,7 +22,7 @@ export class Item extends BaseEntity {
   cdItems: CdItem[];
 
 
-  @ManyToOne(() => Categoria, (categoria) => categoria.itens) // Define a relação com a entidade Cidade
+  @ManyToOne(() => Categoria, (categoria) => categoria.itens, { eager: true }) // Define a relação com a entidade Cidade
   @JoinColumn({ name: 'categoria_id_categoria' })
   public categoria: Categoria;
 

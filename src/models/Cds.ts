@@ -22,7 +22,7 @@ export class CD extends BaseEntity {
   cdItems: CdItem[];
 
 
-  @ManyToOne(() => Cidade, (cidade) => cidade.cds) // Define a relação com a entidade Cidade
+  @ManyToOne(() => Cidade, (cidade) => cidade.cds, { eager: true }) // Define a relação com a entidade Cidade
   @JoinColumn({ name: 'cidade_id_cidade' })
   public cidade: Cidade;
 

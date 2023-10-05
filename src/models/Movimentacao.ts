@@ -29,14 +29,14 @@ export class Movimentacao extends BaseEntity {
   @Column({nullable: true })
   public pessoas_id_pessoas: number;
 
-  @ManyToOne(() => Pessoas, (pessoas) => pessoas.movimentacoes) // Define a relação com a entidade
+  @ManyToOne(() => Pessoas, (pessoas) => pessoas.movimentacoes, { eager: true }) // Define a relação com a entidade
   @JoinColumn({ name: "pessoas_id_pessoas" })
   public pessoas: Pessoas;
 
   @Column({})
   public cd_item_idcd_item: number;
 
-  @ManyToOne(() => CdItem, (cdItem) => cdItem.movimentacoes)
+  @ManyToOne(() => CdItem, (cdItem) => cdItem.movimentacoes, { eager: true })
   @JoinColumn({ name: "cd_item_idcd_item" })
   cdItem: CdItem;
 

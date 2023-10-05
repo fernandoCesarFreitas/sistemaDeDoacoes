@@ -27,7 +27,7 @@ export class Pessoas extends BaseEntity {
   @OneToMany(() => Movimentacao, (movimentacao) => movimentacao.pessoas)
   public movimentacoes: Promise<Movimentacao[]>;
 
-  @ManyToOne(() => Cidade, (cidade) => cidade.pessoas)
+  @ManyToOne(() => Cidade, (cidade) => cidade.pessoas , { eager: true })
   @JoinColumn({ name: "cidade_id_cidade" })
   public cidade: Cidade;
   
