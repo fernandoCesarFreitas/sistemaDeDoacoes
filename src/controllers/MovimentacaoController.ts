@@ -16,6 +16,7 @@ export class MovimentacaoContrller {
       relations:['cdItem', 'pessoas']
       // nome: nome ? ILike(`%${nome}%`):undefined
     }); //aqui na lista nao usamos as {}
+    console.log(movimentacao)
     return res.status(200).json(movimentacao);
   }
   // async list() {
