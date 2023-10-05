@@ -19,14 +19,14 @@ export class CdItem extends BaseEntity {
   @Column({})
   public cd_id: number;
 
-  @ManyToOne(() => CD, (cd) => cd.cdItems)
+  @ManyToOne(() => CD, (cd) => cd.cdItems, { eager: true })
   @JoinColumn({ name: "cd_id" })
   cd: CD;
 
-  @Column({})
+  @Column()
   public item_id: number;
 
-  @ManyToOne(() => Item, (item) => item.cdItems)
+  @ManyToOne(() => Item, (item) => item.cdItems, { eager: true })
   @JoinColumn({ name: "item_id" })
   item: Item;
 
