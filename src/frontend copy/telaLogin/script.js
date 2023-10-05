@@ -23,7 +23,7 @@ buttonSave.addEventListener("click", async function () {
     };
 
     let resposta = await fetch('http://localhost:3000/login', {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
