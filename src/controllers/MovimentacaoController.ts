@@ -36,7 +36,7 @@ async create(req: Request, res: Response): Promise <Response> {
     movimentacao.pessoas_id_pessoas = body.pessoa_id_pessoa;
     cdItem.cd_id =  body.cd_id;
     cdItem.item_id =  body.item_id;
-    cdItem.quantidade = body.quantidade;
+    cdItem.quantidade = body.tipo === 'saida'? - Math.abs(body.quantidade) : Math.abs(body.quantidade);
     console.log(movimentacao)
     console.log(cdItem)
     // Salve a instância no banco de dados
@@ -46,7 +46,7 @@ async create(req: Request, res: Response): Promise <Response> {
   return res.status(200).json(movimentacao);
 }
 
-
+// quantidade: tipo.value === 'saida'? -Math.abs(quantidade.value) : Math.abs(quantidade.value),
 
   // async create(
   //   tipo: string,
@@ -182,7 +182,7 @@ async create(req: Request, res: Response): Promise <Response> {
 
   async delete(req: Request, res: Response): Promise<Response> {
     let body = req.body;
-    let movimentacao: Movimentacao = res.locals.item;
+    let movimentacao: Movimentacao = res.locals.movimentacao;
     let id : number = await movimentacao.cd_item_idcd_item;
     let cdItem1: CdItem | null = await CdItem.findOneBy({id})
     await movimentacao.remove();
@@ -201,7 +201,7 @@ async create(req: Request, res: Response): Promise <Response> {
   // }
 
   async find(req: Request, res: Response): Promise<Response> {
-    let movimentacao: Movimentacao = res.locals.item;
+    let movimentacao: Movimentacao = res.locals.movimentacao;
     return res.status(200).json(movimentacao);
   }
 
