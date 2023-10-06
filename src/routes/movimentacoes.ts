@@ -12,8 +12,8 @@ async function validarPayload(
     let schema = yup.object({
       tipo: yup.string().min(3).max(255).required(),
       quantidade:yup.number().integer().required(),
-      doador: yup.string().min(3).max(255),
-      pessoa_id_pessoa: yup.number().integer(),
+      doador: yup.string().min(3).max(255).nullable(),
+      pessoa_id_pessoa: yup.number().integer().nullable(),
       item_id: yup.number().integer(),
       cd_id: yup.number().integer(),
       cd_item_idcd_item: yup.number().integer(),
