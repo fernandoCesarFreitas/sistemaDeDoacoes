@@ -13,7 +13,6 @@ export class MovimentacaoContrller {
     let nome = req.query.nome;
 
     let movimentacao: Movimentacao[] = await Movimentacao.find({
-      
       // nome: nome ? ILike(`%${nome}%`):undefined
     }); //aqui na lista nao usamos as {}
     return res.status(200).json(movimentacao);
@@ -24,29 +23,30 @@ export class MovimentacaoContrller {
   //   });
   // }
 
-
-async create(req: Request, res: Response): Promise <Response> {
-  let body = req.body;
-  let cdItem = new CdItem();
-  const movimentacao = new Movimentacao();
+  async create(req: Request, res: Response): Promise<Response> {
+    let body = req.body;
+    let cdItem = new CdItem();
+    const movimentacao = new Movimentacao();
     movimentacao.tipo = body.tipo;
     movimentacao.quantidade = body.quantidade;
     movimentacao.doador = body.doador;
     movimentacao.cdItem = cdItem;
     movimentacao.pessoas_id_pessoas = body.pessoa_id_pessoa;
-    cdItem.cd_id =  body.cd_id;
-    cdItem.item_id =  body.item_id;
-    cdItem.quantidade = body.tipo === 'saida'? - Math.abs(body.quantidade) : Math.abs(body.quantidade);
-    console.log(movimentacao)
-    console.log(cdItem)
+    cdItem.cd_id = body.cd_id;
+    cdItem.item_id = body.item_id;
+    cdItem.quantidade =
+      body.tipo === "saida"
+        ? -Math.abs(body.quantidade)
+        : Math.abs(body.quantidade);
+    console.log(movimentacao);
+    console.log(cdItem);
     // Salve a instância no banco de dados
     await cdItem.save();
     await movimentacao.save();
 
-  return res.status(200).json(movimentacao);
-}
+    return res.status(200).json(movimentacao);
+  }
 
-// quantidade: tipo.value === 'saida'? -Math.abs(quantidade.value) : Math.abs(quantidade.value),
 
   // async create(
   //   tipo: string,
@@ -104,13 +104,6 @@ async create(req: Request, res: Response): Promise <Response> {
 
   //   return movimentacao;
   // }
-
-
-
-
-
-
-
 
   // async find(id_movimentacao: number) {
   //   return await Movimentacao.findOneBy({ id_movimentacao });
@@ -183,10 +176,10 @@ async create(req: Request, res: Response): Promise <Response> {
   async delete(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let movimentacao: Movimentacao = res.locals.movimentacao;
-    let id : number = await movimentacao.cd_item_idcd_item;
-    let cdItem1: CdItem | null = await CdItem.findOneBy({id})
+    let id: number = await movimentacao.cd_item_idcd_item;
+    let cdItem1: CdItem | null = await CdItem.findOneBy({ id });
     await movimentacao.remove();
-    if(cdItem1){
+    if (cdItem1) {
       await cdItem1.remove();
     }
     return res.status(200).json(movimentacao);
@@ -196,7 +189,7 @@ async create(req: Request, res: Response): Promise <Response> {
   //   let id: number = await movimentacao.cd_item_idcd_item;
   //   let cdItem1: CdItem | null = await CdItem.findOneBy({ id });
   //   await movimentacao.remove();
-  //   if (cdItem1) 
+  //   if (cdItem1)
   //   await cdItem1.remove();
   // }
 
