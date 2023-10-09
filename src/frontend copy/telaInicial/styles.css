@@ -61,6 +61,8 @@ html {
     /* Largura da navbar */
     padding: 10px;
     /* Espaçamento do conteúdo da tabela */
+    max-height: 710px; /* Altura máxima da tabela */
+    overflow-y: auto; 
 }
 
 .custom-table {
@@ -98,10 +100,10 @@ html {
 #form-container {
     width: 100%;
     /* 85% da largura da tela */
-    max-height: 20%;
+    max-height: 23.1%;
     /* No máximo 20% da altura da tela */
     position: fixed;
-    bottom: 60px;
+    bottom: 50px;
     /* Distância do formulário ao rodapé */
     left: 250px;
     /* Largura da navbar */
@@ -111,6 +113,12 @@ html {
     padding: 20px;
     z-index: 1;
     overflow-y: auto;
+}
+.title-container {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Defina a cor de fundo desejada */
+    z-index: 1; /* Certifique-se de que o título esteja acima da tabela */
 }
 
 .table-heading {
@@ -133,6 +141,7 @@ html {
 
 .form-group label {
     margin-right: 10px;
+    margin-left: 10px;
     /* Espaçamento à direita do rótulo */
 }
 
@@ -172,7 +181,6 @@ footer {
     text-align: center;
     background-color: #616161;
     color: #fff;
-    padding: 10px;
     position: fixed;
     bottom: 0;
     width: 100%;
