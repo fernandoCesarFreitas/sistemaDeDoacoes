@@ -234,3 +234,9 @@ footer {
     max-width: 100%;
     height: auto;
 }
+/* Estilo para tornar o campo "Doador" transparente e não clicável */
+.doador-field.disabled ,.pessoa-field.disabled{
+    opacity: 0.3; /* Define a opacidade como 50% (ou o valor desejado) */
+    pointer-events: none; /* Impede eventos de clique no campo */
+}
+

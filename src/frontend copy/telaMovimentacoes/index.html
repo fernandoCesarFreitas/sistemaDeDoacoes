@@ -62,17 +62,16 @@
                             <option value="entrada">Receber Doação</option>
                             <option value="saida">Efetuar Doação</option>
                         </select>
-                        <label for="nome">Doador:</label>
-                        <input type="text" id="doador" class="form-control">
+                        <label for="nome" class="doador-field">Doador:</label>
+                        <input type="text" id="doador" class="form-control doador-field" name="doador">
                     </div>
                     <div class="form-group">
                         <label for="pessoa">Benificiario:</label>
-                        <select class="form-control" id="pessoa" name="pessoa">
-                            <option value="">Selecionar</option>
+                        <select class="form-control pessoa-field" id="pessoa" name="pessoa">
                         </select>
 
                         <label for="state">CD:</label>
-                        <select class="form-control" id="cd" name="state" required>
+                        <select class="form-control " id="cd" name="state" required>
                             <!-- Opções de cidades aqui -->
                         </select>
                     </div>
