@@ -209,3 +209,20 @@ footer {
 .btn-excluir:hover {
     background-color: #8c0a13; /* Cor de fundo laranja quando o mouse está sobre ele */
 }
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.img {
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.img img {
+    max-width: 100%;
+    height: auto;
+}
