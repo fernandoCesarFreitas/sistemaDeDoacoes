@@ -61,8 +61,9 @@ html {
     /* Largura da navbar */
     padding: 10px;
     /* Espaçamento do conteúdo da tabela */
-    max-height: 710px; /* Altura máxima da tabela */
-    overflow-y: auto; 
+    max-height: 710px;
+    /* Altura máxima da tabela */
+    overflow-y: auto;
 }
 
 .custom-table {
@@ -114,11 +115,14 @@ html {
     z-index: 1;
     overflow-y: auto;
 }
+
 .title-container {
     position: sticky;
     top: 0;
-    background-color: #fff; /* Defina a cor de fundo desejada */
-    z-index: 1; /* Certifique-se de que o título esteja acima da tabela */
+    background-color: #fff;
+    /* Defina a cor de fundo desejada */
+    z-index: 1;
+    /* Certifique-se de que o título esteja acima da tabela */
 }
 
 .table-heading {
@@ -190,33 +194,50 @@ footer {
 
 /* Estilos para o botão Editar */
 .btn-editar {
-    background-color: #FFD700; /* Cor de fundo amarela */
-    color: #fff; /* Cor do texto branco */
-    border: none; /* Sem borda */
-    padding: 5px 10px; /* Espaçamento interno do botão */
-    border-radius: 3px; /* Cantos arredondados */
-    cursor: pointer; /* Cursor do mouse em formato de mão */
-    transition: background-color 0.3s; /* Transição suave da cor de fundo */
+    background-color: #FFD700;
+    /* Cor de fundo amarela */
+    color: #fff;
+    /* Cor do texto branco */
+    border: none;
+    /* Sem borda */
+    padding: 5px 10px;
+    /* Espaçamento interno do botão */
+    border-radius: 3px;
+    /* Cantos arredondados */
+    cursor: pointer;
+    /* Cursor do mouse em formato de mão */
+    transition: background-color 0.3s;
+    /* Transição suave da cor de fundo */
 }
 
 .btn-editar:hover {
-    background-color: #FFA500; /* Cor de fundo laranja quando o mouse está sobre ele */
+    background-color: #FFA500;
+    /* Cor de fundo laranja quando o mouse está sobre ele */
 }
 
 /* Estilos para o botão Excluir */
 .btn-excluir {
-    background-color: #FF0000; /* Cor de fundo vermelha */
-    color: #fff; /* Cor do texto branco */
-    border: none; /* Sem borda */
-    padding: 5px 10px; /* Espaçamento interno do botão */
-    border-radius: 3px; /* Cantos arredondados */
-    cursor: pointer; /* Cursor do mouse em formato de mão */
-    transition: background-color 0.3s; /* Transição suave da cor de fundo */
+    background-color: #FF0000;
+    /* Cor de fundo vermelha */
+    color: #fff;
+    /* Cor do texto branco */
+    border: none;
+    /* Sem borda */
+    padding: 5px 10px;
+    /* Espaçamento interno do botão */
+    border-radius: 3px;
+    /* Cantos arredondados */
+    cursor: pointer;
+    /* Cursor do mouse em formato de mão */
+    transition: background-color 0.3s;
+    /* Transição suave da cor de fundo */
 }
 
 .btn-excluir:hover {
-    background-color: #8c0a13; /* Cor de fundo laranja quando o mouse está sobre ele */
+    background-color: #8c0a13;
+    /* Cor de fundo laranja quando o mouse está sobre ele */
 }
+
 .content {
     display: flex;
     flex-direction: column;
@@ -234,10 +255,14 @@ footer {
     max-width: 100%;
     height: auto;
 }
+
 /* Estilo para tornar o campo "Doador" transparente e não clicável */
-.doador-field.disabled ,.pessoa-field.disabled{
-    opacity: 0.3; /* Define a opacidade como 50% (ou o valor desejado) */
-    pointer-events: none; /* Impede eventos de clique no campo */
+.doador-field.disabled,
+.pessoa-field.disabled {
+    opacity: 0.3;
+    /* Define a opacidade como 50% (ou o valor desejado) */
+    pointer-events: none;
+    /* Impede eventos de clique no campo */
 }
 
 
@@ -247,23 +272,4 @@ footer {
     padding: 20px;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-}
-
-h1 {
-    color: #333;
-}
-
-#resultados {
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #f9f9f9;
 }

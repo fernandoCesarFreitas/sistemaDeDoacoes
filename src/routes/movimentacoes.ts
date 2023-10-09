@@ -56,7 +56,7 @@ let rotas:Router = Router();
 //listar
 rotas.get("/movimentacao", movimentacaoController.list);
 
-rotas.get("/movimentacao/relatorio-categoria", movimentacaoController.listarQuantidadeTotalDeItensEmUmCD);
+rotas.get("/movimentacao/relatorio-categoria", movimentacaoController.listarQuantidadeTotalDeItensEmTodosOsCD);
 //visualizar 1 usuario pelo id
 rotas.get("/movimentacao/:id",validar,movimentacaoController.find);
 //criar
