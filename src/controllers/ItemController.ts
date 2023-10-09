@@ -30,12 +30,13 @@ export class ItemController {
   async update(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let item: Item = res.locals.item;
-
+    console.log('update')
+    console.log(body)
     item.nome = body.nome;
     item.situacao = 'A';
     item.categoria_id_categoria =  body.categoria_id_categoria;
     await item.save();
-
+    console.log(item)
     return res.status(200).json(item);
   }
 
