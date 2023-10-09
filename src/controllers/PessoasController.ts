@@ -1,6 +1,6 @@
 import { Pessoas } from "../models/Pessoas";
 import { Request, Response } from "express";
-import { ILike } from "typeorm";
+import { Cidade } from "../models/Cidades";
 let pessoa: Pessoas = new Pessoas();
 
 export class PessoasController {
@@ -28,24 +28,22 @@ export class PessoasController {
 
   async edit(req: Request, res: Response): Promise<Response> {
     let body = req.body;
-    console.log(body)
     let pessoa : Pessoas = res.locals.pessoa;
-    
-    // console.log(id)
-    // let categoria: Categoria | null = await Categoria.findOneBy({ id_categoria:id });
-
-    // if (!categoria) {
-    //   return res.status(422).json({ error: "Categoria não encontrada!" });
-    // }
-     console.log(res.locals.pessoa)
     pessoa.nome = body.nome;
-    
     pessoa.endereco =  body.endereco;
     pessoa.cidade_id_cidade =  body.cidade_id_cidade;
    
-    await pessoa.save();
-
-    return res.status(200).json(pessoa);
+    let cidade = await Cidade.findOneBy({
+      id_cidade: body.cidade_id_cidade,
+    });
+    if(cidade){
+      pessoa.cidade = cidade;
+      let cidadeSalva = await pessoa.save();
+        console.log(cidadeSalva)
+      return res.status(200).json(cidadeSalva);
+    }else{
+      return res.status(404).json({mensagem:'Cidade não encontrada!'});
+    }
   }
 
   async find(req: Request, res: Response): Promise<Response> {

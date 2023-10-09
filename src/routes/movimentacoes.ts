@@ -60,7 +60,7 @@ rotas.get("/movimentacao/:id",validar,movimentacaoController.find);
 //criar
 rotas.post("/movimentacao",validarPayload,movimentacaoController.create);
 //atualizar
-// rotas.put("/movimentacao/:id",validar,validarPayload,movimentacaoController.edit);
+rotas.put("/movimentacao/:id",validar,validarPayload,movimentacaoController.update);
 //delete
 rotas.delete("/movimentacao/:id",validar,movimentacaoController.delete);
 

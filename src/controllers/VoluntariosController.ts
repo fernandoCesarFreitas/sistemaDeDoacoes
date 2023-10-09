@@ -11,8 +11,8 @@ export class VoluntarioController {
   async list(req: Request, res: Response): Promise<Response> {
     let nome = req.query.nome;
 
-    let voluntario: Voluntario[] = await Voluntario.findBy({
-      nome: nome ? ILike(`%${nome}%`) : undefined,
+    let voluntario: Voluntario[] = await Voluntario.find({
+      where: { situacao: "A" },
     });
     return res.status(200).json(voluntario);
   }

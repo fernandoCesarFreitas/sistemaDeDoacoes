@@ -8,8 +8,8 @@ export class CidadesController {
     async list(req: Request, res: Response): Promise<Response> {
       let nome = req.query.nome;
   
-      let cidades: Cidade[] = await Cidade.findBy({
-        nome: nome ? ILike(`%${nome}%`):undefined
+      let cidades: Cidade[] = await Cidade.find({
+        where: { situacao: "A" },
       }); //aqui na lista nao usamos as {}
       return res.status(200).json(cidades);
     }

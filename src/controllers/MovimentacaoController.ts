@@ -1,9 +1,10 @@
+import { CdItem } from './../models/Cd_item';
 import { Movimentacao } from "../models/Movimentacao";
 import { Request, Response } from "express";
-import { CdItem } from "../models/Cd_item";
 import { CD } from "../models/Cds";
 import { Item } from "../models/Item";
 import PromptSync from "prompt-sync";
+import { Pessoas } from '../models/Pessoas';
 let cdItem = new CdItem();
 let movimentacao = new Movimentacao();
 const prompt = PromptSync();
@@ -25,6 +26,8 @@ export class MovimentacaoContrller {
 
   async create(req: Request, res: Response): Promise<Response> {
     let body = req.body;
+    console.log('criar')
+    console.log(body)
     let cdItem = new CdItem();
     const movimentacao = new Movimentacao();
     movimentacao.tipo = body.tipo;
@@ -47,132 +50,54 @@ export class MovimentacaoContrller {
     return res.status(200).json(movimentacao);
   }
 
+    
+  async update(req: Request, res: Response): Promise<Response> {
+    let body = req.body;
+    let movimentacao: Movimentacao = res.locals.movimentacao;
+    console.log(movimentacao)
+    let cdItem : CdItem =  res.locals.movimentacao
+    console.log("update");
+    console.log(body);
+    movimentacao.tipo = body.tipo;
+    movimentacao.quantidade= body.quantidade;
+    movimentacao.doador =  body.doador;
+    movimentacao.cdItem = body.CdItem;
+    movimentacao.pessoas_id_pessoas =  body.pessoas_id_pessoas;
+    cdItem.cd_id = body.cd_id;
+    cdItem.item_id = body.item_id;
+    cdItem.quantidade =
+      body.tipo === "saida"
+        ? -Math.abs(body.quantidade)
+        : Math.abs(body.quantidade);
+    let pessoa = await Pessoas.findOneBy({
+      idPessoa: body.pessoa_id_pessoa
+    });
+    let item = await Item.findOneBy({
+      id_item: body.item_id
+    });
+    let cd = await CD.findOneBy({
+      id_CD: body.cd_id
+    });
+    if(pessoa && item && cd){
+      movimentacao.pessoas = pessoa;
+      cdItem.item_id = item.id_item;
+      cdItem.cd_id = cd.id_CD;
+      console.log(cdItem)
+      console.log(movimentacao)
+      await cdItem.save();
+      let itemSalvo = await movimentacao.save();
 
-  // async create(
-  //   tipo: string,
-  //   quantidade: number,
-  //   doador: string | null,
-  //   beneficiarioId: number | null,
-  //   idCd: CD,
-  //   idItem: Item
-  // ): Promise<Movimentacao> {
-  //   // fizemos desta forma para garantir que sera criado uma nova instancia toda vez que for criado uma nova movimentação
-  //   let cdItem = new CdItem();
-  //   let movimentacao = new Movimentacao();
+      return res.status(200).json(itemSalvo);
+    }else{
+      return res.status(404).json({mensagem:'Movimentacao não encontrada!'});
+    }
+   
+  
+  }
 
-  //   //uso para calcular a quantidade total de itens
-  //   let cdItems = await CdItem.find({ where: { cd: { id_CD: idCd.id_CD } } });
-  //   let quantidadeTotal = cdItems.reduce(
-  //     (total, cdItem) => total + cdItem.quantidade,
-  //     0
-  //   );
-  //   cdItem.cd = idCd;
-  //   cdItem.item = idItem;
-  //   cdItem.quantidade = 0;
-  //   movimentacao.tipo = tipo;
-  //   movimentacao.cdItem = cdItem;
-  //   //se tido for D entao atribuimos quantidade +
-  //   if (tipo == "D") {
-  //     quantidadeTotal += quantidade;
-  //     cdItem.quantidade = quantidade;
-  //     movimentacao.quantidade = quantidade;
-  //   }
-  //   //se tido for R entao atribuimos quantidade -
-  //   if (tipo == "R") {
-  //     quantidadeTotal -= quantidade;
-  //     if (quantidadeTotal < 0) {
-  //       throw new Error(
-  //         "Quantidade indicada para doação maior que a quantidade disponivel"
-  //       );
-  //     } else {
-  //       cdItem.quantidade = quantidade * -1;
-  //       movimentacao.quantidade = quantidade * -1;
-  //     }
-  //   }
-  //   // se doador vier com algum valor atribuido
-  //   if (doador != null) {
-  //     movimentacao.doador = doador;
-  //   }
-  //   // se beneficiario vier com algum valor atribuido
-  //   if (beneficiarioId != null) {
-  //     movimentacao.pessoas_id_pessoas = beneficiarioId;
-  //   }
 
-  //   await cdItem.save();
 
-  //   await movimentacao.save();
-
-  //   return movimentacao;
-  // }
-
-  // async find(id_movimentacao: number) {
-  //   return await Movimentacao.findOneBy({ id_movimentacao });
-  // }
-
-  // async edit(
-  //   movimentacao: Movimentacao,
-  //   tipo: string,
-  //   quantidade: number,
-  //   doador: string | null,
-  //   beneficiarioId: number | null,
-  //   idCd: CD,
-  //   idItem: Item
-  // ): Promise<Movimentacao> {
-  //   let cdItems = await CdItem.find({ where: { cd: { id_CD: idCd.id_CD } } });
-  //   let quantidadeTotal = cdItems.reduce(
-  //     (total, cdItem) => total + cdItem.quantidade,
-  //     0
-  //   );
-  //   let id: number = await movimentacao.cd_item_idcd_item;
-  //   let cdItem = await movimentacao.cdItem;
-
-  //   let cdItem1: CdItem | null = await CdItem.findOneBy({ id });
-
-  //   if (cdItem1) {
-  //     cdItem1.cd = idCd;
-  //     cdItem1.item = idItem;
-  //   }
-
-  //   if (!cdItem1) {
-  //     throw new Error("CD_Item associado não encontrado");
-  //   }
-
-  //   if (tipo == "D") {
-  //     quantidadeTotal += quantidade;
-  //     cdItem1.quantidade = quantidade;
-  //     movimentacao.quantidade = quantidade;
-  //   }
-
-  //   if (tipo == "R") {
-  //     quantidadeTotal -= quantidade;
-  //     if (quantidadeTotal < 0) {
-  //       throw new Error(
-  //         "Quantidade indicada para doação maior que a quantidade disponível"
-  //       );
-  //     } else {
-  //       cdItem1.quantidade = quantidade * -1;
-  //       movimentacao.quantidade = quantidade * -1;
-  //     }
-  //   }
-
-  //   movimentacao.tipo = tipo;
-  //   movimentacao.quantidade = quantidade;
-
-  //   if (doador != null) {
-  //     movimentacao.doador = doador;
-  //   }
-
-  //   if (beneficiarioId != null) {
-  //     movimentacao.pessoas_id_pessoas = beneficiarioId;
-  //   }
-
-  //   // Salve as alterações no cd_item e na movimentação
-  //   await cdItem1.save();
-  //   await movimentacao.save();
-
-  //   return movimentacao;
-  // }
-
+  
   async delete(req: Request, res: Response): Promise<Response> {
     let body = req.body;
     let movimentacao: Movimentacao = res.locals.movimentacao;
@@ -185,13 +110,7 @@ export class MovimentacaoContrller {
     return res.status(200).json(movimentacao);
   }
 
-  // async delete(movimentacao: Movimentacao): Promise<void> {
-  //   let id: number = await movimentacao.cd_item_idcd_item;
-  //   let cdItem1: CdItem | null = await CdItem.findOneBy({ id });
-  //   await movimentacao.remove();
-  //   if (cdItem1)
-  //   await cdItem1.remove();
-  // }
+  
 
   async find(req: Request, res: Response): Promise<Response> {
     let movimentacao: Movimentacao = res.locals.movimentacao;

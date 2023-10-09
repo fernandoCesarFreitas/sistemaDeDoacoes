@@ -10,7 +10,7 @@ export class ItemController {
     let nome = req.query.nome;
 
     let itens: Item[] = await Item.find({
-      relations: ["categoria"],
+      where: { situacao: "A" },
       // nome: nome ? ILike(`%${nome}%`):undefined
     }); //aqui na lista nao usamos as {}
     return res.status(200).json(itens);

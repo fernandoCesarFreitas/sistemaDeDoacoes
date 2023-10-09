@@ -1,6 +1,7 @@
 import { CD } from "./../models/Cds";
 import { Request, Response } from "express";
 import { ILike } from "typeorm";
+import { Cidade } from "../models/Cidades";
 let cd: CD = new CD();
 
 export class CdController {
@@ -9,7 +10,7 @@ export class CdController {
     let nome = req.query.nome;
 
     let cd: CD[] = await CD.find({
-      relations: ["cidade"],
+      where: { situacao: "A" },
       // nome: nome ? ILike(`%${nome}%`):undefined
     }); //aqui na lista nao usamos as {}
     return res.status(200).json(cd);
@@ -43,9 +44,16 @@ export class CdController {
     cd.situacao = "A";
     cd.cidade_id_cidade = body.cidade_id_cidade;
 
-    await cd.save();
+    let cidade = await Cidade.findOneBy({id_cidade:body.cidade_id_cidade})
 
-    return res.status(200).json(cd);
+    if(cidade){
+      cd.cidade = cidade;
+      let cidadeSalva = await cd.save();
+
+      return res.status(200).json(cidadeSalva);
+    }else{
+      return res.status(404).json({mensagem:'Cidade não encontrada!'});
+    }
   }
 
   async delete(req: Request, res: Response): Promise<Response> {
