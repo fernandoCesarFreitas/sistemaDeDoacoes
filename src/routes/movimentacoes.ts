@@ -55,6 +55,8 @@ async function validarPayload(
 let rotas:Router = Router();
 //listar
 rotas.get("/movimentacao", movimentacaoController.list);
+
+rotas.get("/movimentacao/relatorio-categoria", movimentacaoController.listarQuantidadeTotalDeItensEmUmCD);
 //visualizar 1 usuario pelo id
 rotas.get("/movimentacao/:id",validar,movimentacaoController.find);
 //criar

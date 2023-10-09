@@ -6,6 +6,7 @@ import movimentacaoRoutes from './routes/movimentacoes';
 import itensRoutes from './routes/itens';
 import cidadesRoutes from './routes/cidades';
 import cdsRoutes from './routes/cds';
+import autenticacaoRoutes from './routes/autenticacao'
 import categoriasRoutes from './routes/categorias';
 let server: Express = express();
 let port: Number = Number(process.env.server_port || 3000);
@@ -19,6 +20,7 @@ server.use((req:Request, res:Response, next: NextFunction)=>{
 });
 
 // chama a rota de usuarios
+server.use(autenticacaoRoutes);
 server.use(voluntariosRoutes);
 server.use(pessoasRoutes);
 server.use(movimentacaoRoutes);

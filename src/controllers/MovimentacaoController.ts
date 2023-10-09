@@ -219,7 +219,7 @@ export class MovimentacaoContrller {
     }
   }
 
-  async listarQuantidadeTotalDeItensEmTodosOsCDs() {
+  async listarQuantidadeTotalDeItensEmTodosOsCD() {
     try {
       const cdItemRepository = CdItem;
 
@@ -264,4 +264,52 @@ export class MovimentacaoContrller {
       );
     }
   }
+  async listarQuantidadeTotalDeItensEmTodosOsCDs() {
+    try {
+      // Recupere todos os CDs
+      const cds = await CD.find();
+  
+      if (cds.length === 0) {
+        console.log("Nenhum CD encontrado.");
+      } else {
+        console.log("Quantidade total de itens em todos os CDs:");
+  
+        // Inicialize um objeto para armazenar as quantidades totais por item
+        const itemQuantidades: { [nome: string]: number } = {};
+  
+        // Itere sobre cada CD
+        for (const cd of cds) {
+          // Recupere os itens associados a este CD
+          const cdItems = await CdItem.find({
+            where: { id: cd.id_CD },
+            relations: ["item"],
+          });
+  
+          // Calcule a quantidade total de cada item e atualize o objeto de quantidades
+          cdItems.forEach((cdItem) => {
+            const itemName = cdItem.item.nome;
+            if (itemQuantidades[itemName]) {
+              itemQuantidades[itemName] += cdItem.quantidade;
+            } else {
+              itemQuantidades[itemName] = cdItem.quantidade;
+            }
+          });
+        }
+  
+        // Exiba as quantidades totais por item
+        for (const itemName in itemQuantidades) {
+          console.log(
+            `Nome: ${itemName}, Quantidade Total: ${itemQuantidades[itemName]}`
+          );
+        }
+      }
+    } catch (error) {
+      console.error(
+        "Erro ao listar a quantidade total de itens em todos os CDs:",
+        error
+      );
+    }
+  }
+  
 }
+
