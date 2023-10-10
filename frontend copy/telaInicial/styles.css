@@ -273,3 +273,9 @@ footer {
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+#resultados {
+    width: 80%; /* Define a largura da div */
+    margin: 0 auto; /* Centraliza a div horizontalmente */
+    text-align: center; /* Centraliza o conteúdo dentro da div */
+    padding: 20px; /* Adiciona um espaço ao redor do conteúdo */
+}
