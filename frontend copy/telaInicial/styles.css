@@ -279,3 +279,6 @@ footer {
     text-align: center; /* Centraliza o conteúdo dentro da div */
     padding: 20px; /* Adiciona um espaço ao redor do conteúdo */
 }
+a{
+    text-decoration: none;
+}
