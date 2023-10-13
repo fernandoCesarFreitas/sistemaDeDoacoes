@@ -21,12 +21,14 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@types/nodemailer": "^6.4.11",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "csv-writer": "^1.6.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
+    "nodemailer": "^6.9.6",
     "pg": "^8.11.3",
     "prompt-sync": "^4.2.0",
     "reflect-metadata": "^0.1.13",
